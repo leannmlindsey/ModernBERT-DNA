@@ -1,0 +1,27 @@
+/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/flash_attn/ops/triton/layer_norm.py:958: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+  @custom_fwd
+/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/flash_attn/ops/triton/layer_norm.py:1017: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  @custom_bwd
+/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/transformers/tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884
+  warnings.warn(
+Traceback (most recent call last):
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/main.py", line 518, in <module>
+    main(cfg)
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/main.py", line 396, in main
+    eval_loader = build_dataloader(
+                  ^^^^^^^^^^^^^^^^^
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/main.py", line 280, in build_dataloader
+    data_loader = text_data_module.build_text_dataloader(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/src/text_data.py", line 378, in build_text_dataloader
+    dataset = build_no_streaming_dataset(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/src/text_data.py", line 349, in build_no_streaming_dataset
+    return NoStreamingDataset(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/src/text_data.py", line 468, in __init__
+    obj = json.load(open(index_file_path))
+                    ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/DATA/DNA_DATASET/validation/index.json'
+ERROR:composer.cli.launcher:Rank 0 crashed with exit code 1.
+ERROR:composer.cli.launcher:Global rank 0 (PID 4158334) exited with code 1

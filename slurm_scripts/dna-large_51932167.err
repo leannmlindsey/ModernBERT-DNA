@@ -1,0 +1,73 @@
+/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/flash_attn/ops/triton/layer_norm.py:958: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+  @custom_fwd
+/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/flash_attn/ops/triton/layer_norm.py:1017: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  @custom_bwd
+/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/transformers/tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884
+  warnings.warn(
+wandb: ERROR api_key not configured (no-tty). call wandb.login(key=[your_api_key])
+Traceback (most recent call last):
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/main.py", line 518, in <module>
+    main(cfg)
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/main.py", line 436, in main
+    trainer = Trainer(
+              ^^^^^^^^
+  File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/composer/trainer/trainer.py", line 1575, in __init__
+    self.engine.run_event(Event.INIT)
+  File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/composer/core/engine.py", line 296, in run_event
+    self._run_loggers(event)
+  File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/composer/core/engine.py", line 497, in _run_loggers
+    self._run_callbacks(event, loggers)
+  File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/composer/core/engine.py", line 493, in _run_callbacks
+    cb.run_event(event, self.state, self.logger)
+  File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/composer/core/callback.py", line 96, in run_event
+    return event_cb(state, logger)
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/composer/loggers/wandb_logger.py", line 201, in init
+    wandb.init(**self._init_kwargs)
+  File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 1200, in init
+    raise e
+  File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 1177, in init
+    wi.setup(kwargs)
+  File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 301, in setup
+    wandb_login._login(
+  File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/wandb/sdk/wandb_login.py", line 334, in _login
+    wlogin.prompt_api_key()
+  File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/wandb/sdk/wandb_login.py", line 263, in prompt_api_key
+    raise UsageError("api_key not configured (no-tty). call " + directive)
+wandb.errors.UsageError: api_key not configured (no-tty). call wandb.login(key=[your_api_key])
+[rank0]: Traceback (most recent call last):
+[rank0]:   File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/main.py", line 518, in <module>
+[rank0]:     main(cfg)
+[rank0]:   File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/main.py", line 436, in main
+[rank0]:     trainer = Trainer(
+[rank0]:               ^^^^^^^^
+[rank0]:   File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/composer/trainer/trainer.py", line 1575, in __init__
+[rank0]:     self.engine.run_event(Event.INIT)
+[rank0]:   File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/composer/core/engine.py", line 296, in run_event
+[rank0]:     self._run_loggers(event)
+[rank0]:   File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/composer/core/engine.py", line 497, in _run_loggers
+[rank0]:     self._run_callbacks(event, loggers)
+[rank0]:   File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/composer/core/engine.py", line 493, in _run_callbacks
+[rank0]:     cb.run_event(event, self.state, self.logger)
+[rank0]:   File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/composer/core/callback.py", line 96, in run_event
+[rank0]:     return event_cb(state, logger)
+[rank0]:            ^^^^^^^^^^^^^^^^^^^^^^^
+[rank0]:   File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/composer/loggers/wandb_logger.py", line 201, in init
+[rank0]:     wandb.init(**self._init_kwargs)
+[rank0]:   File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 1200, in init
+[rank0]:     raise e
+[rank0]:   File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 1177, in init
+[rank0]:     wi.setup(kwargs)
+[rank0]:   File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/wandb/sdk/wandb_init.py", line 301, in setup
+[rank0]:     wandb_login._login(
+[rank0]:   File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/wandb/sdk/wandb_login.py", line 334, in _login
+[rank0]:     wlogin.prompt_api_key()
+[rank0]:   File "/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/wandb/sdk/wandb_login.py", line 263, in prompt_api_key
+[rank0]:     raise UsageError("api_key not configured (no-tty). call " + directive)
+[rank0]: wandb.errors.UsageError: api_key not configured (no-tty). call wandb.login(key=[your_api_key])
+[rank0]:[W328 01:03:03.749697656 ProcessGroupNCCL.cpp:1168] Warning: WARNING: process group has NOT been destroyed before we destruct ProcessGroupNCCL. On normal program exit, the application should call destroy_process_group to ensure that any pending NCCL operations have finished in this process. In rare cases this process can exit before this point and block the progress of another member of the process group. This constraint has always been present,  but this warning has only been added since PyTorch 2.4 (function operator())
+ERROR:composer.cli.launcher:Rank 0 crashed with exit code 1.
+WARNING:composer.cli.launcher:Failed to kill global rank 1 (PID 595820) with SIGTERM; terminating with SIGKILL instead
+WARNING:composer.cli.launcher:Failed to kill global rank 2 (PID 595821) with SIGTERM; terminating with SIGKILL instead
+WARNING:composer.cli.launcher:Failed to kill global rank 3 (PID 595822) with SIGTERM; terminating with SIGKILL instead
+ERROR:composer.cli.launcher:Global rank 0 (PID 595819) exited with code 1

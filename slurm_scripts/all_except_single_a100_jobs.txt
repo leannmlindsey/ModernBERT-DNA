@@ -1,0 +1,13 @@
+44583950|lindseylm|2025-01-08T14:10:54|None|CANCELLED by 61710|billing=64,cpu=1,gres/gpu:a100=4,gres/gpu=4,mem=2G,node=1
+49093357|lindseylm|2025-02-25T16:16:19|2025-02-25T23:14:29|FAILED|billing=64,cpu=4,gres/gpu:a100=4,gres/gpu=4,mem=253400M,node=1
+49093653|lindseylm|2025-02-25T16:19:13|2025-02-25T23:15:47|FAILED|billing=64,cpu=4,gres/gpu:a100=4,gres/gpu=4,mem=253400M,node=1
+49132197|lindseylm|2025-02-26T09:03:02|None|CANCELLED by 61710|billing=64,cpu=4,gres/gpu:a100=4,gres/gpu=4,mem=253400M,node=1
+49132624|lindseylm|2025-02-26T09:13:42|2025-02-27T05:38:18|FAILED|billing=64,cpu=4,gres/gpu:a100=4,gres/gpu=4,mem=253400M,node=1
+49262660|lindseylm|2025-02-27T09:53:32|2025-02-27T11:44:03|TIMEOUT|billing=64,cpu=4,gres/gpu:a100=4,gres/gpu=4,mem=253400M,node=1
+49399479|lindseylm|2025-02-28T14:19:31|None|CANCELLED by 61710|billing=64,cpu=16,gres/gpu:a100=4,gres/gpu=4,mem=253400M,node=1
+49404415|lindseylm|2025-02-28T15:20:49|2025-03-01T07:43:21|FAILED|billing=64,cpu=16,gres/gpu:a100=4,gres/gpu=4,mem=253400M,node=1
+49462492|lindseylm|2025-03-01T13:15:21|2025-03-01T18:53:20|TIMEOUT|billing=64,cpu=16,gres/gpu:a100=4,gres/gpu=4,mem=253400M,node=1
+49505947|lindseylm|2025-03-02T08:46:54|2025-03-02T08:46:58|CANCELLED by 61710|billing=64,cpu=16,gres/gpu:a100=4,gres/gpu=4,mem=253400M,node=1
+49506845|lindseylm|2025-03-02T08:54:39|2025-03-02T08:54:48|FAILED|billing=64,cpu=16,gres/gpu:a100=4,gres/gpu=4,mem=253400M,node=1
+49507362|lindseylm|2025-03-02T09:07:00|2025-03-02T09:07:01|FAILED|billing=64,cpu=16,gres/gpu:a100=4,gres/gpu=4,mem=253400M,node=1
+49549536|lindseylm|2025-03-03T09:34:04|None|CANCELLED by 61710|billing=64,cpu=16,gres/gpu:a100=4,gres/gpu=4,mem=253400M,node=1

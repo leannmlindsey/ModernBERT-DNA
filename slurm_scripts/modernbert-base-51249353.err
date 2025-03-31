@@ -1,0 +1,18 @@
+/data/lindseylm/conda/envs/bert24/lib/python3.11/site-packages/flash_attn/ops/triton/layer_norm.py:958: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+  @custom_fwd
+/data/lindseylm/conda/envs/bert24/lib/python3.11/site-packages/flash_attn/ops/triton/layer_norm.py:1017: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  @custom_bwd
+Traceback (most recent call last):
+  File "/data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/main.py", line 41, in <module>
+    import src.text_data as text_data_module
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/src/text_data.py", line 38, in <module>
+    from src.sequence_packer import BufferedIterable, GreedyBestFitSequencePacker
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/src/sequence_packer.py", line 13, in <module>
+    from numba import njit
+  File "/data/lindseylm/conda/envs/bert24/lib/python3.11/site-packages/numba/__init__.py", line 59, in <module>
+    _ensure_critical_deps()
+  File "/data/lindseylm/conda/envs/bert24/lib/python3.11/site-packages/numba/__init__.py", line 45, in _ensure_critical_deps
+    raise ImportError(msg)
+ImportError: Numba needs NumPy 2.0 or less. Got NumPy 2.1.
+ERROR:composer.cli.launcher:Rank 1 crashed with exit code 1.
+ERROR:composer.cli.launcher:Global rank 0 (PID 740294) exited with code -15

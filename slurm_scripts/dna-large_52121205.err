@@ -1,0 +1,2 @@
+/var/spool/slurm/slurmd/job52121205/slurm_script: line 17: syntax error near unexpected token `key=$WANDB_API_KEY'
+/var/spool/slurm/slurmd/job52121205/slurm_script: line 17: `wandb.login(key=$WANDB_API_KEY)'

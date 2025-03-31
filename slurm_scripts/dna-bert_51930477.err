@@ -1,0 +1,5 @@
+/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/flash_attn/ops/triton/layer_norm.py:958: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+  @custom_fwd
+/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/flash_attn/ops/triton/layer_norm.py:1017: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  @custom_bwd
+slurmstepd: error: *** JOB 51930477 ON cn0067 CANCELLED AT 2025-03-26T15:08:32 ***

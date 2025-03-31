@@ -1,0 +1,104 @@
+
+# conda environments:
+#
+base                   /data/lindseylm/conda
+PhageBoost-env         /data/lindseylm/conda/envs/PhageBoost-env
+SpikeHunter            /data/lindseylm/conda/envs/SpikeHunter
+bakta                  /data/lindseylm/conda/envs/bakta
+bert24               * /data/lindseylm/conda/envs/bert24
+biopython              /data/lindseylm/conda/envs/biopython
+blast_env              /data/lindseylm/conda/envs/blast_env
+caduceus_env           /data/lindseylm/conda/envs/caduceus_env
+checkv                 /data/lindseylm/conda/envs/checkv
+data_manipulation      /data/lindseylm/conda/envs/data_manipulation
+datasets               /data/lindseylm/conda/envs/datasets
+dedup                  /data/lindseylm/conda/envs/dedup
+dendropy               /data/lindseylm/conda/envs/dendropy
+dna                    /data/lindseylm/conda/envs/dna
+esm3_new               /data/lindseylm/conda/envs/esm3_new
+genomad                /data/lindseylm/conda/envs/genomad
+gtdbtk-2.1.1           /data/lindseylm/conda/envs/gtdbtk-2.1.1
+marvel                 /data/lindseylm/conda/envs/marvel
+motif_analysis         /data/lindseylm/conda/envs/motif_analysis
+ncbi_datasets          /data/lindseylm/conda/envs/ncbi_datasets
+pharokka               /data/lindseylm/conda/envs/pharokka
+phigaro                /data/lindseylm/conda/envs/phigaro
+phispy                 /data/lindseylm/conda/envs/phispy
+tree_pruner2           /data/lindseylm/conda/envs/tree_pruner2
+vibrant-env            /data/lindseylm/conda/envs/vibrant-env
+visualize              /data/lindseylm/conda/envs/visualize
+vs2                    /data/lindseylm/conda/envs/vs2
+wol                    /data/lindseylm/conda/envs/wol
+                       /gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/VIRSORTER2/VirSorter2/db/conda_envs/c24a9eb8
+
+Waiting up to 30 seconds for all training processes to terminate. Press Ctrl-C to exit immediately.
+Global rank 0 (PID 2279679) exited with code 1
+Global rank 1 (PID 2279680) exited with code 1
+----------Begin global rank 1 STDOUT----------
+
+----------End global rank 1 STDOUT----------
+----------Begin global rank 1 STDERR----------
+/data/lindseylm/conda/envs/bert24/lib/python3.11/site-packages/flash_attn/ops/triton/layer_norm.py:958: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+  @custom_fwd
+/data/lindseylm/conda/envs/bert24/lib/python3.11/site-packages/flash_attn/ops/triton/layer_norm.py:1017: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  @custom_bwd
+Traceback (most recent call last):
+  File "/data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/main.py", line 41, in <module>
+    import src.text_data as text_data_module
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/src/text_data.py", line 38, in <module>
+    from src.sequence_packer import BufferedIterable, GreedyBestFitSequencePacker
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/src/sequence_packer.py", line 13, in <module>
+    from numba import njit
+  File "/data/lindseylm/conda/envs/bert24/lib/python3.11/site-packages/numba/__init__.py", line 59, in <module>
+    _ensure_critical_deps()
+  File "/data/lindseylm/conda/envs/bert24/lib/python3.11/site-packages/numba/__init__.py", line 45, in _ensure_critical_deps
+    raise ImportError(msg)
+ImportError: Numba needs NumPy 2.0 or less. Got NumPy 2.1.
+
+----------End global rank 1 STDERR----------
+Global rank 2 (PID 2279681) exited with code 1
+----------Begin global rank 2 STDOUT----------
+
+----------End global rank 2 STDOUT----------
+----------Begin global rank 2 STDERR----------
+/data/lindseylm/conda/envs/bert24/lib/python3.11/site-packages/flash_attn/ops/triton/layer_norm.py:958: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+  @custom_fwd
+/data/lindseylm/conda/envs/bert24/lib/python3.11/site-packages/flash_attn/ops/triton/layer_norm.py:1017: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  @custom_bwd
+Traceback (most recent call last):
+  File "/data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/main.py", line 41, in <module>
+    import src.text_data as text_data_module
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/src/text_data.py", line 38, in <module>
+    from src.sequence_packer import BufferedIterable, GreedyBestFitSequencePacker
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/src/sequence_packer.py", line 13, in <module>
+    from numba import njit
+  File "/data/lindseylm/conda/envs/bert24/lib/python3.11/site-packages/numba/__init__.py", line 59, in <module>
+    _ensure_critical_deps()
+  File "/data/lindseylm/conda/envs/bert24/lib/python3.11/site-packages/numba/__init__.py", line 45, in _ensure_critical_deps
+    raise ImportError(msg)
+ImportError: Numba needs NumPy 2.0 or less. Got NumPy 2.1.
+
+----------End global rank 2 STDERR----------
+Global rank 3 (PID 2279682) exited with code 1
+----------Begin global rank 3 STDOUT----------
+
+----------End global rank 3 STDOUT----------
+----------Begin global rank 3 STDERR----------
+/data/lindseylm/conda/envs/bert24/lib/python3.11/site-packages/flash_attn/ops/triton/layer_norm.py:958: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+  @custom_fwd
+/data/lindseylm/conda/envs/bert24/lib/python3.11/site-packages/flash_attn/ops/triton/layer_norm.py:1017: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  @custom_bwd
+Traceback (most recent call last):
+  File "/data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/main.py", line 41, in <module>
+    import src.text_data as text_data_module
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/src/text_data.py", line 38, in <module>
+    from src.sequence_packer import BufferedIterable, GreedyBestFitSequencePacker
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/src/sequence_packer.py", line 13, in <module>
+    from numba import njit
+  File "/data/lindseylm/conda/envs/bert24/lib/python3.11/site-packages/numba/__init__.py", line 59, in <module>
+    _ensure_critical_deps()
+  File "/data/lindseylm/conda/envs/bert24/lib/python3.11/site-packages/numba/__init__.py", line 45, in _ensure_critical_deps
+    raise ImportError(msg)
+ImportError: Numba needs NumPy 2.0 or less. Got NumPy 2.1.
+
+----------End global rank 3 STDERR----------

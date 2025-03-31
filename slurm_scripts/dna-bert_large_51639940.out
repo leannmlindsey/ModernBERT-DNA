@@ -1,0 +1,465 @@
+Training using config: 
+model:
+  name: flex_bert
+  model_config:
+    normalization: layernorm
+    hidden_act: gelu
+    vocab_size: 50368
+    init_method: full_megatron
+    num_hidden_layers: 28
+    hidden_size: 1024
+    intermediate_size: 2624
+    num_attention_heads: 16
+    attention_layer: rope
+    attention_probs_dropout_prob: 0.0
+    attn_out_bias: false
+    attn_out_dropout_prob: 0.1
+    attn_qkv_bias: false
+    bert_layer: prenorm
+    embed_dropout_prob: 0.0
+    embed_norm: true
+    final_norm: true
+    skip_first_prenorm: true
+    embedding_layer: sans_pos
+    loss_function: fa_cross_entropy
+    loss_kwargs:
+      reduction: mean
+    mlp_dropout_prob: 0.0
+    mlp_in_bias: false
+    mlp_layer: glu
+    mlp_out_bias: false
+    norm_kwargs:
+      eps: 1.0e-05
+      bias: false
+    head_pred_act: gelu
+    activation_function: gelu
+    padding: unpadded
+    rotary_emb_dim: null
+    rotary_emb_base: 10000.0
+    rotary_emb_scale_base: null
+    rotary_emb_interleaved: false
+    allow_embedding_resizing: true
+    sliding_window: 128
+    global_attn_every_n_layers: 3
+    unpad_embeddings: true
+    compile_model: true
+    masked_prediction: true
+  pretrained_model_name: bert-base-uncased
+  tokenizer_name: ${tokenizer_name}
+  disable_train_metrics: true
+data_local: /data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/DATA/DNA_DATASET
+data_remote: null
+max_seq_len: 1024
+tokenizer_name: zhihan1996/DNABERT-2-117M
+mlm_probability: 0.3
+count_padding_tokens: false
+run_name: dna-modernbert-large-pretrain1
+train_loader:
+  name: text
+  dataset:
+    local: ${data_local}
+    remote: ${data_remote}
+    split: train
+    tokenizer_name: ${tokenizer_name}
+    max_seq_len: ${max_seq_len}
+    shuffle: true
+    mlm_probability: ${mlm_probability}
+    streaming: false
+  drop_last: true
+  num_workers: 6
+  sequence_packing: true
+  batch_size_warmup_min_size: ${device_train_microbatch_size}
+  batch_size_warmup_tokens: 10_000_000_000tok
+eval_loader:
+  name: text
+  dataset:
+    local: ${data_local}
+    remote: ${data_remote}
+    split: validation
+    tokenizer_name: ${tokenizer_name}
+    max_seq_len: ${max_seq_len}
+    shuffle: false
+    mlm_probability: 0.15
+    streaming: false
+  drop_last: false
+  num_workers: 3
+  sequence_packing: false
+scheduler:
+  name: warmup_stable_decay
+  t_warmup: 2_000_000_000tok
+  alpha_f: 0.0
+  t_decay: 0tok
+optimizer:
+  name: decoupled_stableadamw
+  lr: 5.0e-05
+  betas:
+  - 0.9
+  - 0.98
+  eps: 1.0e-06
+  weight_decay: 1.0e-05
+  filter_bias_norm_wd: true
+  log_grad_norm: true
+max_duration: 1_719_000_000_000tok
+eval_interval: 4000ba
+global_train_batch_size: 4928
+global_eval_batch_size: 896
+seed: 314
+device_eval_batch_size: 112
+device_train_microbatch_size: 56
+precision: amp_bf16
+progress_bar: true
+log_to_console: true
+console_log_interval: 100ba
+callbacks:
+  speed_monitor:
+    window_size: 100
+  lr_monitor: {}
+  scheduled_gc: {}
+  log_grad_norm:
+    batch_log_interval: 10
+  packing_efficiency:
+    log_interval: 10
+loggers:
+  wandb:
+    project: dna-modernbert-large
+    entity: leannmlindsey
+save_interval: 4000ba
+save_num_checkpoints_to_keep: 3
+save_folder: ./dnamodernbertlarge/checkpoints/{run_name}
+
+Initializing model...
+n_params=3.9588e+08
+Building train loader...
+Building eval loader...
+Waiting up to 30 seconds for all training processes to terminate. Press Ctrl-C to exit immediately.
+Global rank 0 (PID 4158334) exited with code 1
+Global rank 1 (PID 4158335) exited with code 1
+----------Begin global rank 1 STDOUT----------
+Training using config: 
+model:
+  name: flex_bert
+  model_config:
+    normalization: layernorm
+    hidden_act: gelu
+    vocab_size: 50368
+    init_method: full_megatron
+    num_hidden_layers: 28
+    hidden_size: 1024
+    intermediate_size: 2624
+    num_attention_heads: 16
+    attention_layer: rope
+    attention_probs_dropout_prob: 0.0
+    attn_out_bias: false
+    attn_out_dropout_prob: 0.1
+    attn_qkv_bias: false
+    bert_layer: prenorm
+    embed_dropout_prob: 0.0
+    embed_norm: true
+    final_norm: true
+    skip_first_prenorm: true
+    embedding_layer: sans_pos
+    loss_function: fa_cross_entropy
+    loss_kwargs:
+      reduction: mean
+    mlp_dropout_prob: 0.0
+    mlp_in_bias: false
+    mlp_layer: glu
+    mlp_out_bias: false
+    norm_kwargs:
+      eps: 1.0e-05
+      bias: false
+    head_pred_act: gelu
+    activation_function: gelu
+    padding: unpadded
+    rotary_emb_dim: null
+    rotary_emb_base: 10000.0
+    rotary_emb_scale_base: null
+    rotary_emb_interleaved: false
+    allow_embedding_resizing: true
+    sliding_window: 128
+    global_attn_every_n_layers: 3
+    unpad_embeddings: true
+    compile_model: true
+    masked_prediction: true
+  pretrained_model_name: bert-base-uncased
+  tokenizer_name: ${tokenizer_name}
+  disable_train_metrics: true
+data_local: /data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/DATA/DNA_DATASET
+data_remote: null
+max_seq_len: 1024
+tokenizer_name: zhihan1996/DNABERT-2-117M
+mlm_probability: 0.3
+count_padding_tokens: false
+run_name: dna-modernbert-large-pretrain1
+train_loader:
+  name: text
+  dataset:
+    local: ${data_local}
+    remote: ${data_remote}
+    split: train
+    tokenizer_name: ${tokenizer_name}
+    max_seq_len: ${max_seq_len}
+    shuffle: true
+    mlm_probability: ${mlm_probability}
+    streaming: false
+  drop_last: true
+  num_workers: 6
+  sequence_packing: true
+  batch_size_warmup_min_size: ${device_train_microbatch_size}
+  batch_size_warmup_tokens: 10_000_000_000tok
+eval_loader:
+  name: text
+  dataset:
+    local: ${data_local}
+    remote: ${data_remote}
+    split: validation
+    tokenizer_name: ${tokenizer_name}
+    max_seq_len: ${max_seq_len}
+    shuffle: false
+    mlm_probability: 0.15
+    streaming: false
+  drop_last: false
+  num_workers: 3
+  sequence_packing: false
+scheduler:
+  name: warmup_stable_decay
+  t_warmup: 2_000_000_000tok
+  alpha_f: 0.0
+  t_decay: 0tok
+optimizer:
+  name: decoupled_stableadamw
+  lr: 5.0e-05
+  betas:
+  - 0.9
+  - 0.98
+  eps: 1.0e-06
+  weight_decay: 1.0e-05
+  filter_bias_norm_wd: true
+  log_grad_norm: true
+max_duration: 1_719_000_000_000tok
+eval_interval: 4000ba
+global_train_batch_size: 4928
+global_eval_batch_size: 896
+seed: 314
+device_eval_batch_size: 112
+device_train_microbatch_size: 56
+precision: amp_bf16
+progress_bar: true
+log_to_console: true
+console_log_interval: 100ba
+callbacks:
+  speed_monitor:
+    window_size: 100
+  lr_monitor: {}
+  scheduled_gc: {}
+  log_grad_norm:
+    batch_log_interval: 10
+  packing_efficiency:
+    log_interval: 10
+loggers:
+  wandb:
+    project: dna-modernbert-large
+    entity: leannmlindsey
+save_interval: 4000ba
+save_num_checkpoints_to_keep: 3
+save_folder: ./dnamodernbertlarge/checkpoints/{run_name}
+
+Initializing model...
+n_params=3.9588e+08
+Building train loader...
+Building eval loader...
+
+----------End global rank 1 STDOUT----------
+----------Begin global rank 1 STDERR----------
+/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/flash_attn/ops/triton/layer_norm.py:958: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+  @custom_fwd
+/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/flash_attn/ops/triton/layer_norm.py:1017: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  @custom_bwd
+/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/transformers/tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884
+  warnings.warn(
+Traceback (most recent call last):
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/main.py", line 518, in <module>
+    main(cfg)
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/main.py", line 396, in main
+    eval_loader = build_dataloader(
+                  ^^^^^^^^^^^^^^^^^
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/main.py", line 280, in build_dataloader
+    data_loader = text_data_module.build_text_dataloader(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/src/text_data.py", line 378, in build_text_dataloader
+    dataset = build_no_streaming_dataset(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/src/text_data.py", line 349, in build_no_streaming_dataset
+    return NoStreamingDataset(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/src/text_data.py", line 468, in __init__
+    obj = json.load(open(index_file_path))
+                    ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/DATA/DNA_DATASET/validation/index.json'
+
+----------End global rank 1 STDERR----------
+Global rank 2 (PID 4158336) exited with code 1
+----------Begin global rank 2 STDOUT----------
+Training using config: 
+model:
+  name: flex_bert
+  model_config:
+    normalization: layernorm
+    hidden_act: gelu
+    vocab_size: 50368
+    init_method: full_megatron
+    num_hidden_layers: 28
+    hidden_size: 1024
+    intermediate_size: 2624
+    num_attention_heads: 16
+    attention_layer: rope
+    attention_probs_dropout_prob: 0.0
+    attn_out_bias: false
+    attn_out_dropout_prob: 0.1
+    attn_qkv_bias: false
+    bert_layer: prenorm
+    embed_dropout_prob: 0.0
+    embed_norm: true
+    final_norm: true
+    skip_first_prenorm: true
+    embedding_layer: sans_pos
+    loss_function: fa_cross_entropy
+    loss_kwargs:
+      reduction: mean
+    mlp_dropout_prob: 0.0
+    mlp_in_bias: false
+    mlp_layer: glu
+    mlp_out_bias: false
+    norm_kwargs:
+      eps: 1.0e-05
+      bias: false
+    head_pred_act: gelu
+    activation_function: gelu
+    padding: unpadded
+    rotary_emb_dim: null
+    rotary_emb_base: 10000.0
+    rotary_emb_scale_base: null
+    rotary_emb_interleaved: false
+    allow_embedding_resizing: true
+    sliding_window: 128
+    global_attn_every_n_layers: 3
+    unpad_embeddings: true
+    compile_model: true
+    masked_prediction: true
+  pretrained_model_name: bert-base-uncased
+  tokenizer_name: ${tokenizer_name}
+  disable_train_metrics: true
+data_local: /data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/DATA/DNA_DATASET
+data_remote: null
+max_seq_len: 1024
+tokenizer_name: zhihan1996/DNABERT-2-117M
+mlm_probability: 0.3
+count_padding_tokens: false
+run_name: dna-modernbert-large-pretrain1
+train_loader:
+  name: text
+  dataset:
+    local: ${data_local}
+    remote: ${data_remote}
+    split: train
+    tokenizer_name: ${tokenizer_name}
+    max_seq_len: ${max_seq_len}
+    shuffle: true
+    mlm_probability: ${mlm_probability}
+    streaming: false
+  drop_last: true
+  num_workers: 6
+  sequence_packing: true
+  batch_size_warmup_min_size: ${device_train_microbatch_size}
+  batch_size_warmup_tokens: 10_000_000_000tok
+eval_loader:
+  name: text
+  dataset:
+    local: ${data_local}
+    remote: ${data_remote}
+    split: validation
+    tokenizer_name: ${tokenizer_name}
+    max_seq_len: ${max_seq_len}
+    shuffle: false
+    mlm_probability: 0.15
+    streaming: false
+  drop_last: false
+  num_workers: 3
+  sequence_packing: false
+scheduler:
+  name: warmup_stable_decay
+  t_warmup: 2_000_000_000tok
+  alpha_f: 0.0
+  t_decay: 0tok
+optimizer:
+  name: decoupled_stableadamw
+  lr: 5.0e-05
+  betas:
+  - 0.9
+  - 0.98
+  eps: 1.0e-06
+  weight_decay: 1.0e-05
+  filter_bias_norm_wd: true
+  log_grad_norm: true
+max_duration: 1_719_000_000_000tok
+eval_interval: 4000ba
+global_train_batch_size: 4928
+global_eval_batch_size: 896
+seed: 314
+device_eval_batch_size: 112
+device_train_microbatch_size: 56
+precision: amp_bf16
+progress_bar: true
+log_to_console: true
+console_log_interval: 100ba
+callbacks:
+  speed_monitor:
+    window_size: 100
+  lr_monitor: {}
+  scheduled_gc: {}
+  log_grad_norm:
+    batch_log_interval: 10
+  packing_efficiency:
+    log_interval: 10
+loggers:
+  wandb:
+    project: dna-modernbert-large
+    entity: leannmlindsey
+save_interval: 4000ba
+save_num_checkpoints_to_keep: 3
+save_folder: ./dnamodernbertlarge/checkpoints/{run_name}
+
+Initializing model...
+n_params=3.9588e+08
+Building train loader...
+Building eval loader...
+
+----------End global rank 2 STDOUT----------
+----------Begin global rank 2 STDERR----------
+/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/flash_attn/ops/triton/layer_norm.py:958: FutureWarning: `torch.cuda.amp.custom_fwd(args...)` is deprecated. Please use `torch.amp.custom_fwd(args..., device_type='cuda')` instead.
+  @custom_fwd
+/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/flash_attn/ops/triton/layer_norm.py:1017: FutureWarning: `torch.cuda.amp.custom_bwd(args...)` is deprecated. Please use `torch.amp.custom_bwd(args..., device_type='cuda')` instead.
+  @custom_bwd
+/data/lindseylm/conda/envs/bert24_2/lib/python3.11/site-packages/transformers/tokenization_utils_base.py:1601: FutureWarning: `clean_up_tokenization_spaces` was not set. It will be set to `True` by default. This behavior will be depracted in transformers v4.45, and will be then set to `False` by default. For more details check this issue: https://github.com/huggingface/transformers/issues/31884
+  warnings.warn(
+Traceback (most recent call last):
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/main.py", line 518, in <module>
+    main(cfg)
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/main.py", line 396, in main
+    eval_loader = build_dataloader(
+                  ^^^^^^^^^^^^^^^^^
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/main.py", line 280, in build_dataloader
+    data_loader = text_data_module.build_text_dataloader(
+                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/src/text_data.py", line 378, in build_text_dataloader
+    dataset = build_no_streaming_dataset(
+              ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/src/text_data.py", line 349, in build_no_streaming_dataset
+    return NoStreamingDataset(
+           ^^^^^^^^^^^^^^^^^^^
+  File "/gpfs/gsfs12/users/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/src/text_data.py", line 468, in __init__
+    obj = json.load(open(index_file_path))
+                    ^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/DATA/DNA_DATASET/validation/index.json'
+
+----------End global rank 2 STDERR----------
