@@ -558,7 +558,7 @@ if __name__ == "__main__":
     tokenizer_cfg = om.create(tokenizer_cfg)
     tokenizer = build_tokenizer(tokenizer_cfg)
 
-    loader = build_text_dataloader(cfg, tokenizer, device_batch_size)
+    loader = build_text_dataloader(cfg, tokenizer, device_batch_size, device_microbatch_size=device_batch_size)
     tokenizer = loader.dataset.tokenizer  # type: ignore
     for batch_ix, batch in enumerate(islice(loader, 5)):
         print("\n")

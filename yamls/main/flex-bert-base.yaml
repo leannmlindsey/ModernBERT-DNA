@@ -5,6 +5,8 @@
 # Or point data paths to your remote C4 dataset
 data_local: ./my-copy-c4
 data_remote: # If blank, files must be present in data_local
+#data_local: /data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/DATA/DNA_DATASET
+#tokenizer_name: zhihan1996/DNABERT-2-117M
 
 max_seq_len: 128
 tokenizer_name: bert-base-uncased # switch to bert tokenizer until we add [MASK] token to the llama tokenizer meta-llama/Llama-2-7b-hf
@@ -75,7 +77,7 @@ train_loader:
     shuffle: true
     mlm_probability: ${mlm_probability}
   drop_last: true
-  num_workers: 8
+  num_workers: 2
 
 eval_loader:
   name: text
@@ -88,7 +90,7 @@ eval_loader:
     shuffle: false
     mlm_probability: 0.15 # We always evaluate at 15% masking for consistent comparison
   drop_last: false
-  num_workers: 8
+  num_workers: 2
 
 # Optimization
 scheduler:
@@ -110,19 +112,19 @@ optimizer:
 
 max_duration: 286720000sp # Subsample the training data for ~275M samples
 eval_interval: 2000ba
-global_train_batch_size: 4096
+global_train_batch_size: 512
 
 # System
 seed: 17
-device_train_microbatch_size: 128
+device_train_microbatch_size: 64
 # device_train_microbatch_size: auto
 precision: amp_bf16
 
-global_eval_batch_size: 256
-device_eval_microbatch_size: 64
+global_eval_batch_size: 64
+device_eval_microbatch_size: 32
 
 # Logging
-progress_bar: false
+progress_bar: true
 log_to_console: true
 console_log_interval: 1ba
 
@@ -138,14 +140,14 @@ algorithms:
 
 # (Optional) W&B logging
 # loggers:
-#   wandb:
-#     project:      # Fill this in
-#     entity:      # Fill this in
+wandb:
+  project: bert_c4     # Fill this in
+  entity:  leannmlindsey    # Fill this in
 
 # (Optional) Checkpoint to local filesystem or remote object store
-# save_interval: 3500ba
-# save_num_checkpoints_to_keep: 1  # Important, this cleans up checkpoints saved to DISK
-# save_folder:      # e.g. './{run_name}/ckpt' (local) or 's3://mybucket/mydir/{run_name}/ckpt' (remote)
+save_interval: 1000ba
+save_num_checkpoints_to_keep: 3  # Important, this cleans up checkpoints saved to DISK
+save_folder: ./checkpoints/${run_name}/ckpt   # e.g. './{run_name}/ckpt' (local) or 's3://mybucket/mydir/{run_name}/ckpt' (remote)
 
 # (Optional) Load from local filesystem or remote object store to
 # start from an existing model checkpoint;

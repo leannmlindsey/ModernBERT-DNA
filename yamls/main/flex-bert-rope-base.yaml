@@ -3,15 +3,17 @@
 
 # Follow the instructions in the README to set up ./my-copy-c4
 # Or point data paths to your remote C4 dataset
-data_local: ./my-copy-c4
+#data_local: ./my-copy-c4
 data_remote: # If blank, files must be present in data_local
+data_local: /data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/DATA/DNA_DATASET
+tokenizer_name: zhihan1996/DNABERT-2-117M 
 
-max_seq_len: 512
-tokenizer_name: bert-base-uncased # switch to bert tokenizer until we add [MASK] token to the llama tokenizer meta-llama/Llama-2-7b-hf
+max_seq_len: 1000
+#tokenizer_name: bert-base-uncased # switch to bert tokenizer until we add [MASK] token to the llama tokenizer meta-llama/Llama-2-7b-hf
 mlm_probability: 0.3 # FlexBERT should use 30% masking for optimal performance
 
 # Run Name
-run_name: flex-bert-rope-base
+run_name: dna-flex-bert-rope-base-4gpu
 
 # Model
 model:
@@ -76,10 +78,11 @@ train_loader:
     split: train
     tokenizer_name: ${tokenizer_name}
     max_seq_len: ${max_seq_len}
-    shuffle: true
+    shuffle: false
     mlm_probability: ${mlm_probability}
+    shuffle_block_size: 131072
   drop_last: true
-  num_workers: 8
+  num_workers: 2
 
 eval_loader:
   name: text
@@ -91,8 +94,9 @@ eval_loader:
     max_seq_len: ${max_seq_len}
     shuffle: false
     mlm_probability: 0.15 # We always evaluate at 15% masking for consistent comparison
+    shuffle_block_size: 131072
   drop_last: false
-  num_workers: 8
+  num_workers: 2
 
 # Optimization
 scheduler:
@@ -126,7 +130,7 @@ global_eval_batch_size: 256
 device_eval_microbatch_size: 64
 
 # Logging
-progress_bar: false
+progress_bar: true
 log_to_console: true
 console_log_interval: 1ba
 
@@ -142,17 +146,17 @@ callbacks:
 
 # (Optional) W&B logging
 # loggers:
-#   wandb:
-#     project:      # Fill this in
-#     entity:       # Fill this in
+wandb:
+  project: "flex_bert_rope_dna"      # Fill this in
+  entity: "leannmlindsey"      # Fill this in
 
 # (Optional) Checkpoint to local filesystem or remote object store
-# save_interval: 3500ba
-# save_num_checkpoints_to_keep: 1  # Important, this cleans up checkpoints saved to DISK
-# save_folder:      # e.g. './{run_name}/ckpt' (local) or 's3://mybucket/mydir/{run_name}/ckpt' (remote)
+save_interval: 3500ba
+save_num_checkpoints_to_keep: 3  # Important, this cleans up checkpoints saved to DISK
+save_folder: ./checkpoints/${run_name}/ckpt      # e.g. './{run_name}/ckpt' (local) or 's3://mybucket/mydir/{run_name}/ckpt' (remote)
 
 # (Optional) Load from local filesystem or remote object store to
 # start from an existing model checkpoint;
 # e.g. './ckpt/latest-rank{rank}.pt' (local), or
 # 's3://mybucket/mydir/ckpt/latest-rank{rank}.pt' (remote)
-# load_path: null
+#load_path: /data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/checkpoints/dna-flex-bert-rope-base/ckpt/latest-rank0.pt

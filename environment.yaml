@@ -1,4 +1,4 @@
-name: bert24
+name: bert24_2
 channels:
   - pytorch
   - huggingface
