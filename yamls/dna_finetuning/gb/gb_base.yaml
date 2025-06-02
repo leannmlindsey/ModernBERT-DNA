@@ -17,7 +17,8 @@ model:
   name: flex_bert
   pretrained_model_name: ${tokenizer_name}
   tokenizer_name: ${tokenizer_name}
-  pretrained_checkpoint: ./checkpoints/modernbert-dna-base/checkpoint.pt
+  # Pretrained checkpoint - will be overridden based on model type (bpe/char)
+  pretrained_checkpoint: ./checkpoints/modernbert-dna-base-bpe/checkpoint.pt
   model_config:
     num_hidden_layers: 12
     hidden_size: 768
@@ -41,7 +42,7 @@ model:
     bert_layer: prenorm
     gradient_checkpointing: false
 
-# Tokenizer
+# Tokenizer - will be overridden based on model type (bpe/char)
 tokenizer_name: zhihan1996/DNABERT-2-117M
 
 # Training configuration

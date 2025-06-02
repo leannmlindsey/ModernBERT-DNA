@@ -39,12 +39,18 @@ elif [[ $TASK_NAME == splice_sites* ]]; then
     TASK_CONFIG="yamls/dna_finetuning/ntv2/splice_sites.yaml"
 fi
 
-# Select base config based on model type
+# Select base config and model path based on model type
 if [ "$MODEL_TYPE" == "char" ]; then
-    BASE_CONFIG="yamls/dna_finetuning/modernbert_dna_char.yaml"
+    BASE_CONFIG="yamls/dna_finetuning/ntv2/ntv2_base.yaml"
+    TOKENIZER="dna_char"
+    MODEL_PATH="./checkpoints/modernbert-dna-base-char/checkpoint.pt"
+    VOCAB_SIZE=10
     echo "Using character-level tokenization"
 else
     BASE_CONFIG="yamls/dna_finetuning/ntv2/ntv2_base.yaml"
+    TOKENIZER="zhihan1996/DNABERT-2-117M"
+    MODEL_PATH="./checkpoints/modernbert-dna-base-bpe/checkpoint.pt"
+    VOCAB_SIZE=4096
     echo "Using BPE tokenization"
 fi
 
@@ -65,6 +71,11 @@ python dna_sequence_classification.py \
     $BASE_CONFIG \
     $TASK_CONFIG \
     task_name=$TASK_NAME \
+    tokenizer_name=$TOKENIZER \
+    model.tokenizer_name=$TOKENIZER \
+    model.pretrained_model_name=$TOKENIZER \
+    model.pretrained_checkpoint=$MODEL_PATH \
+    model.model_config.vocab_size=$VOCAB_SIZE \
     save_folder=$OUTPUT_DIR/checkpoints \
     run_name=ntv2_${TASK_NAME}_${MODEL_TYPE}_$(date +%Y%m%d_%H%M%S) \
     $ADDITIONAL_ARGS
