@@ -1,0 +1,186 @@
+# Task-specific configurations for GUE (Genome Understanding Evaluation)
+# 28 datasets across 7 task categories
+
+# ========== Promoter Prediction Tasks ==========
+# Human promoter detection
+human_promoter:
+  train_loader:
+    max_seq_len: 512
+  eval_loader:
+    max_seq_len: 512
+
+# Mouse promoter detection
+mouse_promoter:
+  train_loader:
+    max_seq_len: 512
+  eval_loader:
+    max_seq_len: 512
+
+# ========== Core Promoter Detection Tasks ==========
+# Human core promoter elements
+human_core_promoter:
+  train_loader:
+    max_seq_len: 300
+  eval_loader:
+    max_seq_len: 300
+
+# Mouse core promoter elements
+mouse_core_promoter:
+  train_loader:
+    max_seq_len: 300
+  eval_loader:
+    max_seq_len: 300
+
+# ========== Splice Site Prediction Tasks ==========
+# Human splice acceptor sites
+human_splice_acceptor:
+  train_loader:
+    max_seq_len: 600
+  eval_loader:
+    max_seq_len: 600
+
+# Human splice donor sites
+human_splice_donor:
+  train_loader:
+    max_seq_len: 600
+  eval_loader:
+    max_seq_len: 600
+
+# Mouse splice acceptor sites
+mouse_splice_acceptor:
+  train_loader:
+    max_seq_len: 600
+  eval_loader:
+    max_seq_len: 600
+
+# Mouse splice donor sites
+mouse_splice_donor:
+  train_loader:
+    max_seq_len: 600
+  eval_loader:
+    max_seq_len: 600
+
+# ========== COVID Variant Classification ==========
+covid_variant:
+  train_loader:
+    max_seq_len: 1024
+  eval_loader:
+    max_seq_len: 1024
+
+# ========== Epigenetic Marks Prediction ==========
+# Human histone marks (various modifications)
+human_h3k4me3:
+  train_loader:
+    max_seq_len: 600
+  eval_loader:
+    max_seq_len: 600
+
+human_h3k27me3:
+  train_loader:
+    max_seq_len: 600
+  eval_loader:
+    max_seq_len: 600
+
+human_h3k36me3:
+  train_loader:
+    max_seq_len: 600
+  eval_loader:
+    max_seq_len: 600
+
+human_h3k9me3:
+  train_loader:
+    max_seq_len: 600
+  eval_loader:
+    max_seq_len: 600
+
+human_h3k27ac:
+  train_loader:
+    max_seq_len: 600
+  eval_loader:
+    max_seq_len: 600
+
+# Mouse histone marks
+mouse_h3k4me3:
+  train_loader:
+    max_seq_len: 600
+  eval_loader:
+    max_seq_len: 600
+
+mouse_h3k27me3:
+  train_loader:
+    max_seq_len: 600
+  eval_loader:
+    max_seq_len: 600
+
+mouse_h3k36me3:
+  train_loader:
+    max_seq_len: 600
+  eval_loader:
+    max_seq_len: 600
+
+# ========== Transcription Factor Binding Sites ==========
+# Human TF binding sites
+human_tfbs_ctcf:
+  train_loader:
+    max_seq_len: 512
+  eval_loader:
+    max_seq_len: 512
+
+human_tfbs_nfkb:
+  train_loader:
+    max_seq_len: 512
+  eval_loader:
+    max_seq_len: 512
+
+human_tfbs_cebpb:
+  train_loader:
+    max_seq_len: 512
+  eval_loader:
+    max_seq_len: 512
+
+human_tfbs_foxa1:
+  train_loader:
+    max_seq_len: 512
+  eval_loader:
+    max_seq_len: 512
+
+# Mouse TF binding sites
+mouse_tfbs_ctcf:
+  train_loader:
+    max_seq_len: 512
+  eval_loader:
+    max_seq_len: 512
+
+mouse_tfbs_cebpb:
+  train_loader:
+    max_seq_len: 512
+  eval_loader:
+    max_seq_len: 512
+
+# ========== Species-specific Tasks ==========
+# Yeast tasks
+yeast_utr3:
+  train_loader:
+    max_seq_len: 300
+  eval_loader:
+    max_seq_len: 300
+
+yeast_utr5:
+  train_loader:
+    max_seq_len: 300
+  eval_loader:
+    max_seq_len: 300
+
+# Fungi tasks
+fungi_promoter:
+  train_loader:
+    max_seq_len: 512
+  eval_loader:
+    max_seq_len: 512
+
+# Virus classification
+virus_classification:
+  train_loader:
+    max_seq_len: 1024
+  eval_loader:
+    max_seq_len: 1024

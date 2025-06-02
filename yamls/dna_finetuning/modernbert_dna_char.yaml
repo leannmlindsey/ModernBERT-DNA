@@ -1,0 +1,38 @@
+# Configuration for DNA sequence classification with character-level tokenization
+# Inherits from modernbert_dna_base.yaml but uses character tokenizer
+
+# Override tokenizer to use character-level
+tokenizer_name: dna_char
+
+# Model configuration for character-level tokenization
+model:
+  name: flex_bert
+  pretrained_model_name: dna_char
+  tokenizer_name: dna_char
+  # Path to pretrained checkpoint - should be updated with your character-level checkpoint
+  pretrained_checkpoint: ./checkpoints/modernbert-dna-char/checkpoint.pt
+  model_config:
+    vocab_size: 10  # Character tokenizer vocab size
+    num_hidden_layers: 12
+    hidden_size: 768
+    intermediate_size: 3072
+    num_attention_heads: 12
+    sliding_window: 128
+    global_attn_every_n_layers: 3
+    use_fa2: true
+    use_fa3: false
+    deterministic_fa2: true
+    embed_norm: false
+    final_norm: true
+    embedding_layer: absolute_pos
+    norm_type: rmsnorm
+    mlp_type: mlp
+    activation_function: silu
+    head_pred_act: silu
+    loss_function: cross_entropy
+    attn_out_bias: false
+    attn_qk_bias: true
+    bert_layer: prenorm
+    gradient_checkpointing: false
+
+# Rest of the configuration remains the same as modernbert_dna_base.yaml

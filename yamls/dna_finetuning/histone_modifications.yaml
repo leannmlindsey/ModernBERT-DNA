@@ -1,0 +1,12 @@
+# Configuration for histone modification tasks
+# Inherits from modernbert_dna_base.yaml
+
+# Histone modification tasks use 600bp sequences
+train_loader:
+  max_seq_len: 600
+
+eval_loader:
+  max_seq_len: 600
+
+# Task-specific settings for all histone modifications:
+# H2AFZ, H3K27ac, H3K27me3, H3K36me3, H3K4me1, H3K4me2, H3K4me3, H3K9ac, H3K9me3, H4K20me1

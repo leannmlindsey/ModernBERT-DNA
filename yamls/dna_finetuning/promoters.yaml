@@ -1,0 +1,12 @@
+# Configuration for promoter tasks
+# Inherits from modernbert_dna_base.yaml
+
+# Promoter tasks use 300bp sequences
+train_loader:
+  max_seq_len: 300
+
+eval_loader:
+  max_seq_len: 300
+
+# Task-specific settings for promoter tasks:
+# promoter_all, promoter_no_tata, promoter_tata

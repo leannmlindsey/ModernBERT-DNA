@@ -1,0 +1,9 @@
+# Configuration for splice site tasks
+# Inherits from modernbert_dna_base.yaml
+
+# Splice site tasks have varying sequence lengths
+# splice_sites_acceptors: 600bp
+# splice_sites_all: 200bp  
+# splice_sites_donors: 600bp
+
+# The max_seq_len will be set automatically based on task_name in the code

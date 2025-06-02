@@ -1,0 +1,65 @@
+# Task-specific configurations for Genomic Benchmarks
+# Each task has different sequence lengths
+
+# Human non-TATA promoters: 251bp sequences
+human_nontata_promoters:
+  train_loader:
+    max_seq_len: 251
+  eval_loader:
+    max_seq_len: 251
+
+# Human OCR (Open Chromatin Regions) Ensembl: ~300bp average
+human_ocr_ensembl:
+  train_loader:
+    max_seq_len: 512
+  eval_loader:
+    max_seq_len: 512
+
+# Human enhancers Ensembl: variable length, up to 600bp
+human_enhancers_ensembl:
+  train_loader:
+    max_seq_len: 600
+  eval_loader:
+    max_seq_len: 600
+
+# Mouse enhancers Ensembl: variable length, up to 600bp
+mouse_enhancers_ensembl:
+  train_loader:
+    max_seq_len: 600
+  eval_loader:
+    max_seq_len: 600
+
+# Demo human or worm: ~200bp
+demo_human_or_worm:
+  train_loader:
+    max_seq_len: 200
+  eval_loader:
+    max_seq_len: 200
+
+# Demo coding vs intergenomic: ~200bp  
+demo_coding_vs_intergenomic:
+  train_loader:
+    max_seq_len: 200
+  eval_loader:
+    max_seq_len: 200
+
+# Drosophila enhancers: ~2000bp
+drosophila_enhancers_stark:
+  train_loader:
+    max_seq_len: 2048
+  eval_loader:
+    max_seq_len: 2048
+
+# Human enhancers Cohn: ~500bp
+human_enhancers_cohn:
+  train_loader:
+    max_seq_len: 512
+  eval_loader:
+    max_seq_len: 512
+
+# Human ensembl regulatory: ~600bp
+human_ensembl_regulatory:
+  train_loader:
+    max_seq_len: 600
+  eval_loader:
+    max_seq_len: 600

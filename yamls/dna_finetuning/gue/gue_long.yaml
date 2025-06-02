@@ -1,0 +1,55 @@
+# Configuration for GUE+ (long sequence) tasks
+# These tasks focus on longer input sequences (up to 10000bp)
+
+# Inherits from gue_base.yaml but with modifications for longer sequences
+
+# Model configuration optimized for longer sequences
+model:
+  model_config:
+    sliding_window: 256  # Larger sliding window for longer sequences
+    global_attn_every_n_layers: 2  # More frequent global attention
+
+# Adjusted batch sizes for longer sequences
+global_train_batch_size: 32
+global_eval_batch_size: 64
+device_train_microbatch_size: 4
+device_eval_microbatch_size: 8
+
+# Gradient accumulation for memory efficiency
+gradient_accumulation_steps: 2
+
+# Long sequence tasks
+# Human long-range regulatory elements
+human_long_enhancers:
+  train_loader:
+    max_seq_len: 5000
+  eval_loader:
+    max_seq_len: 5000
+
+# Human long-range chromatin interactions
+human_chromatin_interactions:
+  train_loader:
+    max_seq_len: 10000
+  eval_loader:
+    max_seq_len: 10000
+
+# Mouse long-range regulatory elements  
+mouse_long_enhancers:
+  train_loader:
+    max_seq_len: 5000
+  eval_loader:
+    max_seq_len: 5000
+
+# Human TAD (Topologically Associating Domains) boundaries
+human_tad_boundaries:
+  train_loader:
+    max_seq_len: 10000
+  eval_loader:
+    max_seq_len: 10000
+
+# Long-range promoter-enhancer interactions
+promoter_enhancer_interactions:
+  train_loader:
+    max_seq_len: 8000
+  eval_loader:
+    max_seq_len: 8000

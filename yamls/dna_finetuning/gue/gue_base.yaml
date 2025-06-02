@@ -1,0 +1,116 @@
+# Base configuration for Genome Understanding Evaluation (GUE) tasks
+# GUE: 28 datasets across 7 tasks for multi-species genome understanding
+
+# Basic run configuration
+precision: amp_fp16
+seed: 42
+
+# Data paths
+data_dir: ../DATA/gue
+
+# Model configuration
+model:
+  name: flex_bert
+  pretrained_model_name: ${tokenizer_name}
+  tokenizer_name: ${tokenizer_name}
+  pretrained_checkpoint: ./checkpoints/modernbert-dna-base/checkpoint.pt
+  model_config:
+    num_hidden_layers: 12
+    hidden_size: 768
+    intermediate_size: 3072
+    num_attention_heads: 12
+    sliding_window: 128
+    global_attn_every_n_layers: 3
+    use_fa2: true
+    use_fa3: false
+    deterministic_fa2: true
+    embed_norm: false
+    final_norm: true
+    embedding_layer: absolute_pos
+    norm_type: rmsnorm
+    mlp_type: mlp
+    activation_function: silu
+    head_pred_act: silu
+    loss_function: cross_entropy
+    attn_out_bias: false
+    attn_qk_bias: true
+    bert_layer: prenorm
+    gradient_checkpointing: false
+
+# Tokenizer
+tokenizer_name: zhihan1996/DNABERT-2-117M
+
+# Training configuration
+global_train_batch_size: 64
+global_eval_batch_size: 128
+device_train_microbatch_size: 8
+device_eval_microbatch_size: 16
+
+# Optimizer
+optimizer:
+  name: decoupled_adamw
+  lr: 3e-5
+  betas: [0.9, 0.999]
+  eps: 1e-8
+  weight_decay: 0.01
+
+# Scheduler
+scheduler:
+  name: linear_decay_with_warmup
+  t_warmup: 0.06dur
+  alpha_f: 0.0
+
+# Training duration
+max_duration: 10ep
+eval_interval: 1ep
+
+# Dataloader settings
+train_loader:
+  task_name: ${task_name}
+  split: train
+  tokenizer_name: ${tokenizer_name}
+  data_format: gue  # Specify GUE data format
+  shuffle: true
+  drop_last: true
+  num_workers: 8
+  pin_memory: true
+  prefetch_factor: 2
+  persistent_workers: true
+
+eval_loader:
+  task_name: ${task_name}
+  split: test
+  tokenizer_name: ${tokenizer_name}
+  data_format: gue
+  shuffle: false
+  drop_last: false
+  num_workers: 8
+  pin_memory: true
+  prefetch_factor: 2
+  persistent_workers: true
+
+# Callbacks
+callbacks:
+  lr_monitor: {}
+  speed_monitor:
+    window_size: 50
+  memory_monitor: {}
+  runtime_estimator: {}
+
+# Algorithms
+algorithms:
+  gradient_clipping:
+    clipping_type: norm
+    clipping_threshold: 1.0
+
+# Logging
+progress_bar: true
+log_to_console: true
+console_log_interval: 10ba
+
+# Checkpointing
+save_folder: ./checkpoints/gue/${task_name}
+save_interval: 1ep
+save_num_checkpoints_to_keep: 2
+save_overwrite: true
+load_weights_only: true
