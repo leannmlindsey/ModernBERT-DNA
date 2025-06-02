@@ -60,10 +60,10 @@ GUE is a comprehensive multi-species benchmark with 28+ datasets across 7 task c
 #### NT v2 Tasks
 ```bash
 # Fine-tune with BPE tokenization (default)
-./run_dna_finetuning.sh H3K27ac bpe
+./run_ntv2_finetuning.sh H3K27ac bpe
 
 # Fine-tune with character-level tokenization
-./run_dna_finetuning.sh H3K27ac char
+./run_ntv2_finetuning.sh H3K27ac char
 ```
 
 #### GB Tasks
@@ -88,7 +88,7 @@ GUE is a comprehensive multi-species benchmark with 28+ datasets across 7 task c
 
 ```bash
 # Run all NT v2 tasks
-./run_all_dna_tasks.sh bpe
+./run_all_ntv2_tasks.sh bpe
 
 # Run all GB tasks
 ./run_all_gb_tasks.sh bpe
@@ -108,19 +108,20 @@ GUE is a comprehensive multi-species benchmark with 28+ datasets across 7 task c
 ### Main Scripts
 - `dna_sequence_classification.py`: Main training script supporting all three benchmarks
 - Shell scripts for each benchmark:
-  - NT v2: `run_dna_finetuning.sh`, `run_all_dna_tasks.sh`
+  - NT v2: `run_ntv2_finetuning.sh`, `run_all_ntv2_tasks.sh`
   - GB: `run_gb_finetuning.sh`, `run_all_gb_tasks.sh`
   - GUE: `run_gue_finetuning.sh`, `run_all_gue_tasks.sh`
 
 ### YAML Configurations
 ```
 yamls/dna_finetuning/
-├── modernbert_dna_base.yaml      # Base config for NT v2 with BPE
-├── modernbert_dna_char.yaml      # Base config for character tokenization
-├── histone_modifications.yaml    # NT v2 histone tasks
-├── enhancers.yaml               # NT v2 enhancer tasks
-├── promoters.yaml               # NT v2 promoter tasks
-├── splice_sites.yaml            # NT v2 splice site tasks
+├── modernbert_dna_char.yaml      # Base config for character tokenization (all benchmarks)
+├── ntv2/
+│   ├── ntv2_base.yaml          # Base config for NT v2 with BPE
+│   ├── histone_modifications.yaml  # NT v2 histone tasks
+│   ├── enhancers.yaml          # NT v2 enhancer tasks
+│   ├── promoters.yaml          # NT v2 promoter tasks
+│   └── splice_sites.yaml       # NT v2 splice site tasks
 ├── gb/
 │   ├── gb_base.yaml            # Base config for GB tasks
 │   └── gb_tasks.yaml           # Task-specific GB settings
@@ -146,7 +147,7 @@ yamls/dna_finetuning/
 
 ```
 outputs/
-├── dna_finetuning/          # NT v2 results
+├── ntv2/                     # NT v2 results
 │   └── <task_name>_<model_type>/
 ├── gb/                       # GB results  
 │   └── <task_name>_<model_type>/
@@ -154,7 +155,7 @@ outputs/
     └── <task_name>_<model_type>/
 
 logs/
-├── dna_finetuning_<model_type>_<timestamp>/
+├── ntv2_finetuning_<model_type>_<timestamp>/
 ├── gb_finetuning_<model_type>_<timestamp>/
 └── gue_finetuning_<model_type>_<timestamp>/
 ```

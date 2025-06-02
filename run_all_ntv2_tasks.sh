@@ -1,7 +1,7 @@
 #!/bin/bash
 
-# Script to run all NT v2 DNA classification tasks
-# Usage: ./run_all_dna_tasks.sh [bpe|char]
+# Script to run all Nucleotide Transformer v2 (NT v2) tasks
+# Usage: ./run_all_ntv2_tasks.sh [bpe|char]
 
 set -e
 
@@ -23,7 +23,7 @@ echo "Running all NT v2 tasks with $MODEL_TYPE tokenization"
 echo "Total tasks: ${#ALL_TASKS[@]}"
 
 # Create log directory
-LOG_DIR="logs/dna_finetuning_${MODEL_TYPE}_$(date +%Y%m%d_%H%M%S)"
+LOG_DIR="logs/ntv2_finetuning_${MODEL_TYPE}_$(date +%Y%m%d_%H%M%S)"
 mkdir -p $LOG_DIR
 
 # Run each task
@@ -35,7 +35,7 @@ for TASK in "${ALL_TASKS[@]}"; do
     LOG_FILE="$LOG_DIR/${TASK}.log"
     
     # Run the task and capture output
-    ./run_dna_finetuning.sh $TASK $MODEL_TYPE 2>&1 | tee $LOG_FILE
+    ./run_ntv2_finetuning.sh $TASK $MODEL_TYPE 2>&1 | tee $LOG_FILE
     
     if [ ${PIPESTATUS[0]} -eq 0 ]; then
         echo "Task $TASK completed successfully"

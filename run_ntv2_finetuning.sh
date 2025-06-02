@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Script to run DNA sequence classification fine-tuning on NT v2 tasks
-# Usage: ./run_dna_finetuning.sh <task_name> <model_type> [additional_args]
-# Example: ./run_dna_finetuning.sh H3K27ac bpe
-# Example: ./run_dna_finetuning.sh enhancers char --seed 42
+# Script to run Nucleotide Transformer v2 (NT v2) fine-tuning tasks
+# Usage: ./run_ntv2_finetuning.sh <task_name> <model_type> [additional_args]
+# Example: ./run_ntv2_finetuning.sh H3K27ac bpe
+# Example: ./run_ntv2_finetuning.sh enhancers char --seed 42
 
 set -e  # Exit on error
 
@@ -23,20 +23,20 @@ VALID_TASKS=(
 )
 
 if [[ ! " ${VALID_TASKS[@]} " =~ " ${TASK_NAME} " ]]; then
-    echo "Error: Invalid task name '${TASK_NAME}'"
-    echo "Valid tasks are: ${VALID_TASKS[@]}"
+    echo "Error: Invalid NT v2 task name '${TASK_NAME}'"
+    echo "Valid NT v2 tasks are: ${VALID_TASKS[@]}"
     exit 1
 fi
 
 # Determine which config to use based on task category
 if [[ $TASK_NAME == H* ]] || [[ $TASK_NAME == "H4K20me1" ]]; then
-    TASK_CONFIG="yamls/dna_finetuning/histone_modifications.yaml"
+    TASK_CONFIG="yamls/dna_finetuning/ntv2/histone_modifications.yaml"
 elif [[ $TASK_NAME == enhancer* ]]; then
-    TASK_CONFIG="yamls/dna_finetuning/enhancers.yaml"
+    TASK_CONFIG="yamls/dna_finetuning/ntv2/enhancers.yaml"
 elif [[ $TASK_NAME == promoter* ]]; then
-    TASK_CONFIG="yamls/dna_finetuning/promoters.yaml"
+    TASK_CONFIG="yamls/dna_finetuning/ntv2/promoters.yaml"
 elif [[ $TASK_NAME == splice_sites* ]]; then
-    TASK_CONFIG="yamls/dna_finetuning/splice_sites.yaml"
+    TASK_CONFIG="yamls/dna_finetuning/ntv2/splice_sites.yaml"
 fi
 
 # Select base config based on model type
@@ -44,16 +44,16 @@ if [ "$MODEL_TYPE" == "char" ]; then
     BASE_CONFIG="yamls/dna_finetuning/modernbert_dna_char.yaml"
     echo "Using character-level tokenization"
 else
-    BASE_CONFIG="yamls/dna_finetuning/modernbert_dna_base.yaml"
+    BASE_CONFIG="yamls/dna_finetuning/ntv2/ntv2_base.yaml"
     echo "Using BPE tokenization"
 fi
 
 # Create output directory
-OUTPUT_DIR="outputs/dna_finetuning/${TASK_NAME}_${MODEL_TYPE}"
+OUTPUT_DIR="outputs/ntv2/${TASK_NAME}_${MODEL_TYPE}"
 mkdir -p $OUTPUT_DIR
 
 # Run training
-echo "Running fine-tuning for task: $TASK_NAME"
+echo "Running NT v2 fine-tuning for task: $TASK_NAME"
 echo "Task config: $TASK_CONFIG"
 echo "Base config: $BASE_CONFIG"
 echo "Output directory: $OUTPUT_DIR"
@@ -66,5 +66,5 @@ python dna_sequence_classification.py \
     $TASK_CONFIG \
     task_name=$TASK_NAME \
     save_folder=$OUTPUT_DIR/checkpoints \
-    run_name=${TASK_NAME}_${MODEL_TYPE}_$(date +%Y%m%d_%H%M%S) \
+    run_name=ntv2_${TASK_NAME}_${MODEL_TYPE}_$(date +%Y%m%d_%H%M%S) \
     $ADDITIONAL_ARGS
