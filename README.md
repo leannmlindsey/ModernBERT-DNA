@@ -1,4 +1,4 @@
-## NOTE: This is a modified version of the ModernBERT repository, intended to be used to pretrain ModernBERT models on DNA sequence input. The conversion scripts used to create the DNA input (conversions of the DNABERT2 dataset, OpenGenome and OpenGenome2 datasets) are available at [github.com/leannmlindsey/DNADatasetConversionScripts](https://github.com/leannmlindsey/DNADatasetConversionScripts.git).
+### NOTE: This is a modified version of the ModernBERT repository, intended to be used to pretrain ModernBERT models on DNA sequence input. The conversion scripts used to create the DNA input (conversions of the DNABERT2 dataset, OpenGenome and OpenGenome2 datasets) are available at [github.com/leannmlindsey/DNADatasetConversionScripts](https://github.com/leannmlindsey/DNADatasetConversionScripts.git).
 
 # Welcome!
 
