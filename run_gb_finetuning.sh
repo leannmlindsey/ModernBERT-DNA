@@ -17,10 +17,10 @@ VALID_TASKS=(
     "human_nontata_promoters"
     "human_ocr_ensembl"
     "human_enhancers_ensembl"
-    "mouse_enhancers_ensembl"
+    "dummy_mouse_enhancers"  # Note: directory shows 'dummy_mouse_enhancers'
     "demo_human_or_worm"
     "demo_coding_vs_intergenomic"
-    "drosophila_enhancers_stark"
+    "drosophilia_enhancers"  # Note: directory shows 'drosophilia' (with i)
     "human_enhancers_cohn"
     "human_ensembl_regulatory"
 )

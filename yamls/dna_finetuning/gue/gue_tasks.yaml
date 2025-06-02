@@ -16,66 +16,66 @@ mouse_promoter:
   eval_loader:
     max_seq_len: 512
 
-# ========== Core Promoter Detection Tasks ==========
-# Human core promoter elements
-human_core_promoter:
+# ========== Promoter Tasks ==========
+prom_300_all:
   train_loader:
     max_seq_len: 300
   eval_loader:
     max_seq_len: 300
 
-# Mouse core promoter elements
-mouse_core_promoter:
+prom_300_notata:
   train_loader:
     max_seq_len: 300
   eval_loader:
     max_seq_len: 300
 
-# ========== Splice Site Prediction Tasks ==========
-# Human splice acceptor sites
-human_splice_acceptor:
+prom_300_tata:
+  train_loader:
+    max_seq_len: 300
+  eval_loader:
+    max_seq_len: 300
+
+prom_core_all:
+  train_loader:
+    max_seq_len: 300
+  eval_loader:
+    max_seq_len: 300
+
+prom_core_notata:
+  train_loader:
+    max_seq_len: 300
+  eval_loader:
+    max_seq_len: 300
+
+prom_core_tata:
+  train_loader:
+    max_seq_len: 300
+  eval_loader:
+    max_seq_len: 300
+
+# ========== Splice Site Tasks ==========
+splice_reconstructed:
   train_loader:
     max_seq_len: 600
   eval_loader:
     max_seq_len: 600
 
-# Human splice donor sites
-human_splice_donor:
-  train_loader:
-    max_seq_len: 600
-  eval_loader:
-    max_seq_len: 600
-
-# Mouse splice acceptor sites
-mouse_splice_acceptor:
-  train_loader:
-    max_seq_len: 600
-  eval_loader:
-    max_seq_len: 600
-
-# Mouse splice donor sites
-mouse_splice_donor:
-  train_loader:
-    max_seq_len: 600
-  eval_loader:
-    max_seq_len: 600
-
-# ========== COVID Variant Classification ==========
-covid_variant:
+# ========== Virus Tasks ==========
+virus_covid:
   train_loader:
     max_seq_len: 1024
   eval_loader:
     max_seq_len: 1024
 
-# ========== Epigenetic Marks Prediction ==========
-# Human histone marks (various modifications)
-human_h3k4me3:
+# ========== Epigenetic Marks Prediction (EMP) ==========
+# Human histone marks
+human_h3:
   train_loader:
     max_seq_len: 600
   eval_loader:
     max_seq_len: 600
 
-human_h3k27me3:
+human_h3k14ac:
   train_loader:
     max_seq_len: 600
   eval_loader:
@@ -87,100 +87,106 @@ human_h3k36me3:
   eval_loader:
     max_seq_len: 600
 
-human_h3k9me3:
+human_h3k4me1:
   train_loader:
     max_seq_len: 600
   eval_loader:
     max_seq_len: 600
 
-human_h3k27ac:
+human_h3k4me2:
   train_loader:
     max_seq_len: 600
   eval_loader:
     max_seq_len: 600
 
-# Mouse histone marks
-mouse_h3k4me3:
+human_h3k4me3:
   train_loader:
     max_seq_len: 600
   eval_loader:
     max_seq_len: 600
 
-mouse_h3k27me3:
+human_h3k79me3:
   train_loader:
     max_seq_len: 600
   eval_loader:
     max_seq_len: 600
 
-mouse_h3k36me3:
+human_h3k9ac:
+  train_loader:
+    max_seq_len: 600
+  eval_loader:
+    max_seq_len: 600
+
+human_h4:
+  train_loader:
+    max_seq_len: 600
+  eval_loader:
+    max_seq_len: 600
+
+human_h4ac:
   train_loader:
     max_seq_len: 600
   eval_loader:
     max_seq_len: 600
 
 # ========== Transcription Factor Binding Sites ==========
-# Human TF binding sites
-human_tfbs_ctcf:
+tf_0:
   train_loader:
     max_seq_len: 512
   eval_loader:
     max_seq_len: 512
 
-human_tfbs_nfkb:
+tf_1:
   train_loader:
     max_seq_len: 512
   eval_loader:
     max_seq_len: 512
 
-human_tfbs_cebpb:
+tf_2:
   train_loader:
     max_seq_len: 512
   eval_loader:
     max_seq_len: 512
 
-human_tfbs_foxa1:
+tf_3:
   train_loader:
     max_seq_len: 512
   eval_loader:
     max_seq_len: 512
 
-# Mouse TF binding sites
-mouse_tfbs_ctcf:
+tf_4:
   train_loader:
     max_seq_len: 512
   eval_loader:
     max_seq_len: 512
 
-mouse_tfbs_cebpb:
+# ========== Mouse Tasks ==========
+mouse_0:
   train_loader:
     max_seq_len: 512
   eval_loader:
     max_seq_len: 512
 
-# ========== Species-specific Tasks ==========
-# Yeast tasks
-yeast_utr3:
-  train_loader:
-    max_seq_len: 300
-  eval_loader:
-    max_seq_len: 300
-
-yeast_utr5:
-  train_loader:
-    max_seq_len: 300
-  eval_loader:
-    max_seq_len: 300
-
-# Fungi tasks
-fungi_promoter:
+mouse_1:
   train_loader:
     max_seq_len: 512
   eval_loader:
     max_seq_len: 512
 
-# Virus classification
-virus_classification:
+mouse_2:
   train_loader:
-    max_seq_len: 1024
+    max_seq_len: 512
   eval_loader:
-    max_seq_len: 1024
+    max_seq_len: 512
+
+mouse_3:
+  train_loader:
+    max_seq_len: 512
+  eval_loader:
+    max_seq_len: 512
+
+mouse_4:
+  train_loader:
+    max_seq_len: 512
+  eval_loader:
+    max_seq_len: 512

@@ -14,23 +14,21 @@ ADDITIONAL_ARGS="$@"
 
 # Validate task name
 VALID_TASKS=(
+    # EMP tasks (Epigenetic Marks Prediction)
+    "human_h3" "human_h3k14ac" "human_h3k36me3" "human_h3k4me1" "human_h3k4me2"
+    "human_h3k4me3" "human_h3k79me3" "human_h3k9ac" "human_h4" "human_h4ac"
+    # Mouse tasks
+    "mouse_0" "mouse_1" "mouse_2" "mouse_3" "mouse_4"
     # Promoter tasks
-    "human_promoter" "mouse_promoter"
-    "human_core_promoter" "mouse_core_promoter"
-    # Splice site tasks
-    "human_splice_acceptor" "human_splice_donor"
-    "mouse_splice_acceptor" "mouse_splice_donor"
-    # COVID variant
-    "covid_variant"
-    # Epigenetic marks
-    "human_h3k4me3" "human_h3k27me3" "human_h3k36me3" "human_h3k9me3" "human_h3k27ac"
-    "mouse_h3k4me3" "mouse_h3k27me3" "mouse_h3k36me3"
+    "prom_300_all" "prom_300_notata" "prom_300_tata"
+    "prom_core_all" "prom_core_notata" "prom_core_tata"
+    # Splice tasks
+    "splice_reconstructed"
     # TF binding sites
-    "human_tfbs_ctcf" "human_tfbs_nfkb" "human_tfbs_cebpb" "human_tfbs_foxa1"
-    "mouse_tfbs_ctcf" "mouse_tfbs_cebpb"
-    # Species-specific
-    "yeast_utr3" "yeast_utr5" "fungi_promoter" "virus_classification"
-    # Long-range tasks (GUE+)
+    "tf_0" "tf_1" "tf_2" "tf_3" "tf_4"
+    # Virus tasks
+    "virus_covid"
+    # Long-range tasks (GUE+) - if you have these
     "human_long_enhancers" "human_chromatin_interactions"
     "mouse_long_enhancers" "human_tad_boundaries"
     "promoter_enhancer_interactions"

@@ -21,24 +21,51 @@ The GB collection contains 9 curated genomic sequence classification datasets:
 - **Other organisms**: drosophila_enhancers_stark, demo_human_or_worm, demo_coding_vs_intergenomic
 
 ### 3. Genome Understanding Evaluation (GUE)
-GUE is a comprehensive multi-species benchmark with 28+ datasets across 7 task categories:
-- **Promoter prediction**: human/mouse promoter and core promoter detection
-- **Splice site prediction**: acceptor/donor sites for human and mouse
-- **COVID variant classification**: SARS-CoV-2 variant identification
-- **Epigenetic marks**: H3K4me3, H3K27me3, H3K36me3, H3K9me3, H3K27ac
-- **TF binding sites**: CTCF, NFκB, CEBPB, FOXA1
-- **Species-specific tasks**: yeast UTRs, fungi promoters, virus classification
-- **GUE+ (long-range)**: Tasks with sequences up to 10,000bp
+GUE is a comprehensive benchmark with datasets organized in subdirectories:
+- **EMP (Epigenetic Marks Prediction)**: H3, H3K14ac, H3K36me3, H3K4me1/2/3, H3K79me3, H3K9ac, H4, H4ac
+- **Mouse tasks**: mouse/0-4 (5 different tasks)
+- **Promoter tasks**: prom_300_all/notata/tata, prom_core_all/notata/tata
+- **Splice sites**: splice_reconstructed
+- **TF binding sites**: tf/0-4 (5 different TF tasks)
+- **Virus tasks**: virus/covid
+- **GUE+ (long-range)**: Tasks with sequences up to 10,000bp (if available)
 
 ## Prerequisites
 
-1. **Data**: Download datasets and organize as follows:
+1. **Data**: The datasets should be organized as follows:
    ```
-   ../DATA/
-   └── <task_name>/
-       ├── train.csv  # Standardized format with "sequence" and "label" columns
-       ├── dev.csv    # (or test.csv for GB/GUE tasks)
-       └── test.csv
+   /data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/Finetuning_Datasets/
+   ├── NTv2/
+   │   └── <task_name>/         # Tasks at root level
+   │       ├── train.csv
+   │       ├── dev.csv
+   │       └── test.csv
+   ├── genomic-benchmark/
+   │   └── <task_name>/         # Tasks at root level
+   │       ├── train.csv
+   │       ├── dev.csv
+   │       └── test.csv
+   └── GUE/
+       ├── EMP/                 # Epigenetic marks subdirectory
+       │   └── <histone_mark>/  # H3, H3K14ac, etc.
+       │       ├── train.csv
+       │       ├── dev.csv
+       │       └── test.csv
+       ├── mouse/               # Mouse tasks subdirectory
+       │   └── <0-4>/          # Numbered tasks
+       │       └── ...
+       ├── prom/               # Promoter tasks subdirectory
+       │   └── <prom_task>/    # prom_300_all, etc.
+       │       └── ...
+       ├── splice/             # Splice tasks subdirectory
+       │   └── reconstructed/
+       │       └── ...
+       ├── tf/                 # TF binding subdirectory
+       │   └── <0-4>/         # Numbered tasks
+       │       └── ...
+       └── virus/              # Virus tasks subdirectory
+           └── covid/
+               └── ...
    ```
    
    **Standardized CSV Format**: All tasks can use CSV files with two columns:

@@ -318,6 +318,46 @@ def build_tokenizer(cfg: DictConfig):
         return AutoTokenizer.from_pretrained(cfg.tokenizer_name, trust_remote_code=True)
 
 
+# GUE task directory mapping
+GUE_TASK_MAPPING = {
+    # EMP tasks (Epigenetic Marks Prediction)
+    "human_h3": "EMP/H3",
+    "human_h3k14ac": "EMP/H3K14ac",
+    "human_h3k36me3": "EMP/H3K36me3",
+    "human_h3k4me1": "EMP/H3K4me1",
+    "human_h3k4me2": "EMP/H3K4me2",
+    "human_h3k4me3": "EMP/H3K4me3",
+    "human_h3k79me3": "EMP/H3K79me3",
+    "human_h3k9ac": "EMP/H3K9ac",
+    "human_h4": "EMP/H4",
+    "human_h4ac": "EMP/H4ac",
+    # Mouse tasks
+    "mouse_0": "mouse/0",
+    "mouse_1": "mouse/1",
+    "mouse_2": "mouse/2",
+    "mouse_3": "mouse/3",
+    "mouse_4": "mouse/4",
+    # Promoter tasks
+    "prom_300_all": "prom/prom_300_all",
+    "prom_300_notata": "prom/prom_300_notata",
+    "prom_300_tata": "prom/prom_300_tata",
+    "prom_core_all": "prom/prom_core_all",
+    "prom_core_notata": "prom/prom_core_notata",
+    "prom_core_tata": "prom/prom_core_tata",
+    # Splice site tasks
+    "splice_reconstructed": "splice/reconstructed",
+    # TF binding tasks
+    "tf_0": "tf/0",
+    "tf_1": "tf/1",
+    "tf_2": "tf/2",
+    "tf_3": "tf/3",
+    "tf_4": "tf/4",
+    # Virus tasks
+    "covid": "virus/covid",
+    "virus_covid": "virus/covid",
+}
+
+
 def build_dna_dataloader(cfg: DictConfig, device_batch_size: int, tokenizer):
     """Create a dataloader for DNA sequence classification.
     
@@ -335,31 +375,42 @@ def build_dna_dataloader(cfg: DictConfig, device_batch_size: int, tokenizer):
     # Get data format
     data_format = cfg.get("data_format", "ntv2")
     
-    # Build data path - prioritize CSV format
+    # Build data path
     data_dir = cfg.get("data_dir", "../DATA")
     split_name = "dev" if cfg.split == "validation" else cfg.split
     
-    # First, always check for CSV files (your standardized format)
-    csv_path = os.path.join(data_dir, cfg.task_name, f"{split_name}.csv")
+    # Handle GUE task subdirectory structure
+    if data_format == "gue" and cfg.task_name in GUE_TASK_MAPPING:
+        task_subdir = GUE_TASK_MAPPING[cfg.task_name]
+        csv_path = os.path.join(data_dir, task_subdir, f"{split_name}.csv")
+    else:
+        # For NT v2 and GB, tasks are at root level
+        csv_path = os.path.join(data_dir, cfg.task_name, f"{split_name}.csv")
     
     if os.path.exists(csv_path):
         # Use the standardized CSV format
         data_path = csv_path
-    elif data_format == "gb":
-        # Fall back to original GB format if CSV doesn't exist
-        data_path = os.path.join(data_dir, cfg.task_name, f"{split_name}.tsv")
-    elif data_format == "gue":
-        # Fall back to original GUE formats if CSV doesn't exist
-        # Try JSON first, then TSV
-        json_path = os.path.join(data_dir, cfg.task_name, f"{split_name}.json")
-        tsv_path = os.path.join(data_dir, cfg.task_name, f"{split_name}.tsv")
-        if os.path.exists(json_path):
-            data_path = json_path
-        else:
-            data_path = tsv_path
     else:
-        # Default to CSV path
-        data_path = csv_path
+        # Fallback for non-standard formats (kept for compatibility)
+        if data_format == "gb":
+            data_path = os.path.join(data_dir, cfg.task_name, f"{split_name}.tsv")
+        elif data_format == "gue":
+            # Try JSON first, then TSV
+            if cfg.task_name in GUE_TASK_MAPPING:
+                task_subdir = GUE_TASK_MAPPING[cfg.task_name]
+                json_path = os.path.join(data_dir, task_subdir, f"{split_name}.json")
+                tsv_path = os.path.join(data_dir, task_subdir, f"{split_name}.tsv")
+            else:
+                json_path = os.path.join(data_dir, cfg.task_name, f"{split_name}.json")
+                tsv_path = os.path.join(data_dir, cfg.task_name, f"{split_name}.tsv")
+            
+            if os.path.exists(json_path):
+                data_path = json_path
+            else:
+                data_path = tsv_path
+        else:
+            # Default to CSV path
+            data_path = csv_path
     
     # Create dataset
     dataset = DNASequenceDataset(
