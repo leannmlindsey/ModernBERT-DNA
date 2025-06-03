@@ -127,9 +127,9 @@ def build_scheduler(name, kwargs):
 
 
 def run_job_worker(
-    cfg: DictConfig,
+    cfg: dict,
     job_name: str,
-    model_cfg: DictConfig,
+    model_cfg: dict,
     metrics: Optional[DictProxy] = None,
 ):
     """Run a single DNA evaluation job."""
@@ -138,20 +138,20 @@ def run_job_worker(
         raise ValueError(f"Job {job_name} not found in TASK_NAME_TO_CLASS")
     
     # Set up for specific job
-    job_cfg = cfg.jobs.get(job_name, {})
+    job_cfg = cfg["jobs"].get(job_name, {})
     
     # Build model
-    if model_cfg.name == "flex_bert":
+    if model_cfg["name"] == "flex_bert":
         model = flex_bert_module.create_flex_bert_classification(**model_cfg)
-    elif model_cfg.name == "mosaic_bert":
+    elif model_cfg["name"] == "mosaic_bert":
         model = mosaic_bert_module.create_mosaic_bert_classification(**model_cfg)
-    elif model_cfg.name == "hf_bert":
+    elif model_cfg["name"] == "hf_bert":
         model = hf_bert_module.create_hf_bert_classification(**model_cfg)
     else:
-        raise ValueError(f"Model {model_cfg.name} not supported")
+        raise ValueError(f"Model {model_cfg['name']} not supported")
     
     # Update optimizer configuration for DNA
-    if not hasattr(job_cfg, "optimizer") or job_cfg.optimizer is None:
+    if "optimizer" not in job_cfg or job_cfg.get("optimizer") is None:
         optimizer = DecoupledAdamW(
             model.parameters(),
             lr=job_cfg.get("lr", 2.0e-05),
@@ -184,10 +184,10 @@ def run_job_worker(
     # Build the job
     job = TASK_NAME_TO_CLASS[job_name](
         model=model,
-        tokenizer_name=cfg.tokenizer_name,
-        dataset_base_path=cfg.dataset_base_path,
-        batch_size=job_cfg.get("batch_size", cfg.default_batch_size),
-        seed=job_cfg.get("seed", cfg.seed),
+        tokenizer_name=cfg["tokenizer_name"],
+        dataset_base_path=cfg["dataset_base_path"],
+        batch_size=job_cfg.get("batch_size", cfg["default_batch_size"]),
+        seed=job_cfg.get("seed", cfg["seed"]),
         scheduler=scheduler,
         optimizer=optimizer,
         callbacks=callbacks,
@@ -221,23 +221,23 @@ def run_job_worker(
     return eval_metrics
 
 
-def main(cfg: DictConfig):
+def main(cfg: dict):
     """Main evaluation function."""
     
     # Set seed
-    if hasattr(cfg, "seed"):
-        reproducibility.seed_all(cfg.seed)
+    if "seed" in cfg:
+        reproducibility.seed_all(cfg["seed"])
     
     # Get list of jobs to run
-    if hasattr(cfg, "eval_tasks") and cfg.eval_tasks:
-        jobs_to_run = cfg.eval_tasks
+    if "eval_tasks" in cfg and cfg["eval_tasks"]:
+        jobs_to_run = cfg["eval_tasks"]
     else:
-        jobs_to_run = list(cfg.jobs.keys())
+        jobs_to_run = list(cfg["jobs"].keys())
     
     print(f"Running DNA evaluation jobs: {jobs_to_run}")
     
     # Build model configuration
-    model_cfg = cfg.model
+    model_cfg = cfg["model"]
     
     # Get number of labels for each task
     from src.evals.dna_data import NTV2_TASK_CONFIG
