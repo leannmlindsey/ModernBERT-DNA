@@ -446,7 +446,10 @@ def create_flex_bert_classification(
         model.gradient_checkpointing_enable()  # type: ignore
 
     # setup the tokenizer
-    if tokenizer_name:
+    if tokenizer_name == "dna_char":
+        from src.dna_tokenizer import DNACharacterTokenizer
+        tokenizer = DNACharacterTokenizer(max_len=1024)
+    elif tokenizer_name:
         tokenizer = transformers.AutoTokenizer.from_pretrained(tokenizer_name)
     else:
         tokenizer = transformers.AutoTokenizer.from_pretrained(pretrained_model_name)
