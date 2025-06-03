@@ -224,7 +224,7 @@ def run_job_worker(
     job = TASK_NAME_TO_CLASS[job_name](**job_args)
     
     # Train the job
-    trainer = job.trainer()
+    trainer = job.get_trainer()
     if job_cfg.get("skip_training", cfg.get("skip_training", False)):
         # Just evaluate without training
         eval_metrics = trainer.eval()
