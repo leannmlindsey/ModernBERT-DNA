@@ -30,7 +30,14 @@ def evaluate_on_test_set(
     Returns:
         Dictionary of metrics
     """
-    model.eval()
+    # Handle HuggingFaceModel wrapper
+    if hasattr(model, 'model'):
+        # This is a HuggingFaceModel wrapper, get the underlying model
+        actual_model = model.model
+    else:
+        actual_model = model
+        
+    actual_model.eval()
     all_predictions = []
     all_labels = []
     
@@ -40,11 +47,18 @@ def evaluate_on_test_set(
             batch = {k: v.to(device) if isinstance(v, torch.Tensor) else v for k, v in batch.items()}
             
             # Get model predictions
-            # Handle HuggingFaceModel wrapper which uses 'label' instead of 'labels'
-            if 'labels' in batch and 'label' not in batch:
-                batch['label'] = batch.pop('labels')
+            # Rename labels to label for compatibility
+            if 'labels' in batch:
+                labels = batch.pop('labels')
+            else:
+                labels = batch.pop('label')
             
-            outputs = model(**batch)
+            # Forward pass with just input_ids and attention_mask
+            outputs = actual_model(
+                input_ids=batch['input_ids'],
+                attention_mask=batch.get('attention_mask'),
+                labels=labels
+            )
             
             # Extract logits from output
             if hasattr(outputs, 'logits'):
@@ -61,7 +75,7 @@ def evaluate_on_test_set(
             
             # Collect predictions and labels
             all_predictions.extend(predictions.cpu().numpy())
-            all_labels.extend(batch['label'].cpu().numpy())
+            all_labels.extend(labels.cpu().numpy())
     
     # Convert to numpy arrays
     all_predictions = np.array(all_predictions)
