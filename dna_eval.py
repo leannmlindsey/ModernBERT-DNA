@@ -289,19 +289,19 @@ def main(cfg: DictConfig):
 if __name__ == "__main__":
     yaml_path, args_list = sys.argv[1], sys.argv[2:]
     with open(yaml_path) as f:
-        yaml_cfg = om.load(f)
+        yaml_cfg = om.OmegaConf.load(f)
     
     # Load defaults if they exist
     if os.path.exists("yamls/defaults.yaml"):
         with open("yamls/defaults.yaml") as f:
-            default_cfg = om.load(f)
-        cfg = om.merge(default_cfg, yaml_cfg)
+            default_cfg = om.OmegaConf.load(f)
+        cfg = om.OmegaConf.merge(default_cfg, yaml_cfg)
     else:
         cfg = yaml_cfg
     
     # Merge with command line arguments
-    cli_cfg = om.from_cli(args_list)
-    cfg = om.merge(cfg, cli_cfg)
-    cfg = om.to_container(cfg, resolve=True)
+    cli_cfg = om.OmegaConf.from_cli(args_list)
+    cfg = om.OmegaConf.merge(cfg, cli_cfg)
+    cfg = om.OmegaConf.to_container(cfg, resolve=True)
     
     main(cfg)
