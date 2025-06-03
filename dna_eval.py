@@ -254,7 +254,7 @@ def main(cfg: dict):
         # Update model config with task-specific number of labels
         task_model_cfg = copy.deepcopy(model_cfg)
         if job_name in NTV2_TASK_CONFIG:
-            task_model_cfg.num_labels = NTV2_TASK_CONFIG[job_name]["num_labels"]
+            task_model_cfg["num_labels"] = NTV2_TASK_CONFIG[job_name]["num_labels"]
         
         # Run the job
         job_metrics = run_job_worker(cfg, job_name, task_model_cfg)
