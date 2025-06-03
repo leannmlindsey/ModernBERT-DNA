@@ -64,8 +64,36 @@ if isinstance(checkpoint, dict):
     # Also check 'state' if it exists
     if 'state' in checkpoint:
         print("\nCheckpoint has 'state' key")
-        if isinstance(checkpoint['state'], dict) and 'model' in checkpoint['state']:
-            print("Found model in checkpoint['state']")
+        state = checkpoint['state']
+        if isinstance(state, dict):
+            print(f"State dict keys: {list(state.keys())}")
+            
+            if 'model' in state:
+                print("\nFound model in checkpoint['state']['model']")
+                model_state = state['model']
+                
+                # Show first 10 model keys
+                print("\nFirst 10 keys in state['model']:")
+                for i, key in enumerate(list(model_state.keys())[:10]):
+                    print(f"  {key}")
+                
+                # Count layers in state['model']
+                layer_keys = [k for k in model_state.keys() if 'encoder.layers' in k]
+                layer_numbers = set()
+                for k in layer_keys:
+                    if 'encoder.layers.' in k:
+                        parts = k.split('.')
+                        for i, part in enumerate(parts):
+                            if part == 'layers' and i+1 < len(parts):
+                                try:
+                                    layer_num = int(parts[i+1])
+                                    layer_numbers.add(layer_num)
+                                except:
+                                    pass
+                
+                if layer_numbers:
+                    print(f"\nFound layers in state['model']: {sorted(layer_numbers)}")
+                    print(f"Total number of layers: {len(layer_numbers)}")
 else:
     print("\nCheckpoint is not a dictionary, it's a:", type(checkpoint))
     
