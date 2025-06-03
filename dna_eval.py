@@ -141,14 +141,24 @@ def run_job_worker(
     job_cfg = cfg["jobs"].get(job_name, {})
     
     # Build model
-    if model_cfg["name"] == "flex_bert":
-        model = flex_bert_module.create_flex_bert_classification(**model_cfg)
-    elif model_cfg["name"] == "mosaic_bert":
-        model = mosaic_bert_module.create_mosaic_bert_classification(**model_cfg)
-    elif model_cfg["name"] == "hf_bert":
-        model = hf_bert_module.create_hf_bert_classification(**model_cfg)
+    model_name = model_cfg["name"]
+    model_args = {
+        "num_labels": model_cfg.get("num_labels", 2),
+        "pretrained_model_name": model_cfg.get("pretrained_model_name", "bert-base-uncased"),
+        "model_config": model_cfg.get("model_config", {}),
+        "tokenizer_name": model_cfg.get("tokenizer_name"),
+        "gradient_checkpointing": model_cfg.get("gradient_checkpointing", False),
+        "pretrained_checkpoint": model_cfg.get("pretrained_checkpoint"),
+    }
+    
+    if model_name == "flex_bert":
+        model = flex_bert_module.create_flex_bert_classification(**model_args)
+    elif model_name == "mosaic_bert":
+        model = mosaic_bert_module.create_mosaic_bert_classification(**model_args)
+    elif model_name == "hf_bert":
+        model = hf_bert_module.create_hf_bert_classification(**model_args)
     else:
-        raise ValueError(f"Model {model_cfg['name']} not supported")
+        raise ValueError(f"Model {model_name} not supported")
     
     # Update optimizer configuration for DNA
     if "optimizer" not in job_cfg or job_cfg.get("optimizer") is None:
