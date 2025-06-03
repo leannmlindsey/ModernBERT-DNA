@@ -260,7 +260,7 @@ def run_job_worker(
             test_dataloader=test_dataloader,
             task_name=job_name,
             num_labels=NTV2_TASK_CONFIG[job_name]["num_labels"],
-            device=trainer.state.device
+            device="cuda" if torch.cuda.is_available() else "cpu"
         )
         
         # Print test metrics
