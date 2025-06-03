@@ -28,27 +28,17 @@ if [[ ! " ${VALID_TASKS[@]} " =~ " ${TASK_NAME} " ]]; then
     exit 1
 fi
 
-# Determine which config to use based on task category
-if [[ $TASK_NAME == H* ]] || [[ $TASK_NAME == "H4K20me1" ]]; then
-    TASK_CONFIG="yamls/dna_finetuning/ntv2/histone_modifications.yaml"
-elif [[ $TASK_NAME == enhancer* ]]; then
-    TASK_CONFIG="yamls/dna_finetuning/ntv2/enhancers.yaml"
-elif [[ $TASK_NAME == promoter* ]]; then
-    TASK_CONFIG="yamls/dna_finetuning/ntv2/promoters.yaml"
-elif [[ $TASK_NAME == splice_sites* ]]; then
-    TASK_CONFIG="yamls/dna_finetuning/ntv2/splice_sites.yaml"
-fi
+# Use consolidated YAML config
+CONFIG_FILE="yamls/dna_finetuning/ntv2.yaml"
 
-# Select base config and model path based on model type
+# Select model path based on model type
 if [ "$MODEL_TYPE" == "char" ]; then
-    BASE_CONFIG="yamls/dna_finetuning/ntv2/ntv2_base.yaml"
     TOKENIZER="dna_char"
     #MODEL_PATH="./checkpoints/modernbert-dna-base-char/checkpoint.pt"
     MODEL_PATH="/data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/dnamodernbertbase/checkpoints/dna-char-modernbert-basemod-pretrain-4gpu/ep0-ba70000-rank0.pt"
     VOCAB_SIZE=10
     echo "Using character-level tokenization"
 else
-    BASE_CONFIG="yamls/dna_finetuning/ntv2/ntv2_base.yaml"
     TOKENIZER="zhihan1996/DNABERT-2-117M"
     #MODEL_PATH="./checkpoints/modernbert-dna-base-bpe/checkpoint.pt"
     MODEL_PATH="/data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/dnamodernbertbase/checkpoints/dna-modernbert-basemod-pretrain-4gpu/ep2-ba52000-rank0.pt"
@@ -62,16 +52,13 @@ mkdir -p $OUTPUT_DIR
 
 # Run training
 echo "Running NT v2 fine-tuning for task: $TASK_NAME"
-echo "Task config: $TASK_CONFIG"
-echo "Base config: $BASE_CONFIG"
+echo "Config file: $CONFIG_FILE"
 echo "Output directory: $OUTPUT_DIR"
 echo "Additional arguments: $ADDITIONAL_ARGS"
 
-# Merge configs and run training
-# The configs are merged in order: defaults.yaml -> base_config -> task_config -> CLI args
+# Run training with consolidated config
 python dna_sequence_classification.py \
-    $BASE_CONFIG \
-    $TASK_CONFIG \
+    $CONFIG_FILE \
     task_name=$TASK_NAME \
     tokenizer_name=$TOKENIZER \
     model.tokenizer_name=$TOKENIZER \

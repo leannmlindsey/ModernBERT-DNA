@@ -1,0 +1,145 @@
+# Configuration for all Genomic Benchmarks (GB) tasks
+# GB: Standard genomic sequence classification tasks
+
+# Whether to run tasks serially or in parallel
+parallel: false
+
+# Basic run configuration
+base_run_name: modernbert-dna-gb-finetuning
+default_seed: 42
+precision: amp_fp16
+
+# Data configuration
+data_dir: ${finetuning_datasets_base_path}/genomic-benchmark
+data_format: gb
+
+# Tokenizer - will be set by run script based on model type
+tokenizer_name: null
+
+# Model configuration
+model:
+  name: flex_bert
+  pretrained_model_name: ${tokenizer_name}
+  tokenizer_name: ${tokenizer_name}
+  # Pretrained checkpoint - will be overridden by run script
+  pretrained_checkpoint: null
+  model_config:
+    normalization: layernorm
+    deterministic_fa2: false
+    hidden_act: gelu
+    use_fa2: true
+    sliding_window: 128
+    global_attn_every_n_layers: 3
+    use_sdpa_attn_mask: false
+    tie_word_embeddings: false
+
+# Optimizer configuration
+optimizer:
+  name: decoupled_adamw
+  lr: 2.0e-05
+  betas: [0.9, 0.98]
+  eps: 1.0e-06
+  weight_decay: 1.0e-05
+
+# Scheduler configuration
+scheduler:
+  name: constant_with_warmup
+  t_warmup: 0.06dur
+
+# Training configuration
+max_duration: 10ep
+eval_interval: 1ep
+global_train_batch_size: 64
+global_eval_batch_size: 64
+device_train_microbatch_size: auto
+device_eval_batch_size: auto
+
+# Evaluation configuration
+eval_first: false
+eval_subset_num_batches: -1
+
+# Logging configuration
+progress_bar: true
+log_to_console: true
+console_log_interval: 10ba
+
+# Checkpoint configuration  
+save_interval: 1ep
+save_num_checkpoints_to_keep: 2
+save_overwrite: true
+load_weights_only: true
+
+# Callbacks
+callbacks:
+  lr_monitor: {}
+  speed_monitor: {}
+
+# Task-specific configurations
+tasks:
+  # Promoter prediction tasks
+  human_nontata_promoters:
+    train_loader:
+      max_seq_len: 512
+    eval_loader:
+      max_seq_len: 512
+    num_labels: 2
+    
+  # Regulatory element prediction
+  human_ocr_ensembl:
+    train_loader:
+      max_seq_len: 512
+    eval_loader:
+      max_seq_len: 512
+    num_labels: 2
+    
+  # Enhancer prediction tasks
+  human_enhancers_ensembl:
+    train_loader:
+      max_seq_len: 512
+    eval_loader:
+      max_seq_len: 512
+    num_labels: 2
+    
+  dummy_mouse_enhancers:
+    train_loader:
+      max_seq_len: 512
+    eval_loader:
+      max_seq_len: 512
+    num_labels: 2
+    
+  drosophilia_enhancers:
+    train_loader:
+      max_seq_len: 512
+    eval_loader:
+      max_seq_len: 512
+    num_labels: 2
+    
+  human_enhancers_cohn:
+    train_loader:
+      max_seq_len: 512
+    eval_loader:
+      max_seq_len: 512
+    num_labels: 2
+    
+  # Regulatory element classification
+  human_ensembl_regulatory:
+    train_loader:
+      max_seq_len: 512
+    eval_loader:
+      max_seq_len: 512
+    num_labels: 3  # May need to verify actual number of classes
+    
+  # Demo/test tasks
+  demo_human_or_worm:
+    train_loader:
+      max_seq_len: 512
+    eval_loader:
+      max_seq_len: 512
+    num_labels: 2
+    
+  demo_coding_vs_intergenomic:
+    train_loader:
+      max_seq_len: 512
+    eval_loader:
+      max_seq_len: 512
+    num_labels: 2

@@ -589,5 +589,13 @@ if __name__ == "__main__":
         yaml_cfg = om.load(f)
     cli_cfg = om.from_cli(args_list)
     cfg = om.merge(default_cfg, yaml_cfg, cli_cfg)
+    
+    # Handle task-specific configuration if present
+    if "tasks" in cfg and cfg.get("task_name") and cfg.task_name in cfg.tasks:
+        task_cfg = cfg.tasks[cfg.task_name]
+        # Merge task-specific config with main config
+        # Priority: CLI args > task config > yaml config > defaults
+        cfg = om.merge(cfg, task_cfg, cli_cfg)
+    
     cfg = cast(DictConfig, cfg)  # for type checking
     train(cfg)

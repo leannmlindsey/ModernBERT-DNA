@@ -47,27 +47,20 @@ LONG_TASKS=(
     "promoter_enhancer_interactions"
 )
 
-# Select base config and model path based on model type
+# Use consolidated YAML config
+CONFIG_FILE="yamls/dna_finetuning/gue.yaml"
+
+# Select model path based on model type
 if [ "$MODEL_TYPE" == "char" ]; then
-    BASE_CONFIG="yamls/dna_finetuning/gue/gue_base.yaml"
     TOKENIZER="dna_char"
     MODEL_PATH="./checkpoints/modernbert-dna-base-char/checkpoint.pt"
     VOCAB_SIZE=10
     echo "Using character-level tokenization"
 else
-    BASE_CONFIG="yamls/dna_finetuning/gue/gue_base.yaml"
     TOKENIZER="zhihan1996/DNABERT-2-117M"
     MODEL_PATH="./checkpoints/modernbert-dna-base-bpe/checkpoint.pt"
     VOCAB_SIZE=4096
     echo "Using BPE tokenization"
-fi
-
-# Select task config
-if [[ " ${LONG_TASKS[@]} " =~ " ${TASK_NAME} " ]]; then
-    TASK_CONFIG="yamls/dna_finetuning/gue/gue_long.yaml"
-    echo "Using long-range task configuration"
-else
-    TASK_CONFIG="yamls/dna_finetuning/gue/gue_tasks.yaml"
 fi
 
 # Create output directory
@@ -76,15 +69,13 @@ mkdir -p $OUTPUT_DIR
 
 # Run training
 echo "Running GUE fine-tuning for task: $TASK_NAME"
-echo "Base config: $BASE_CONFIG"
-echo "Task config: $TASK_CONFIG"
+echo "Config file: $CONFIG_FILE"
 echo "Output directory: $OUTPUT_DIR"
 echo "Additional arguments: $ADDITIONAL_ARGS"
 
-# Merge configs and run training
+# Run training with consolidated config
 python dna_sequence_classification.py \
-    $BASE_CONFIG \
-    $TASK_CONFIG \
+    $CONFIG_FILE \
     task_name=$TASK_NAME \
     tokenizer_name=$TOKENIZER \
     model.tokenizer_name=$TOKENIZER \

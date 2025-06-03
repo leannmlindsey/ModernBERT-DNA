@@ -1,0 +1,207 @@
+# Configuration for all Nucleotide Transformer v2 (NT v2) tasks
+# NT v2: 18 downstream tasks for DNA sequence analysis
+
+# Whether to run tasks serially or in parallel
+parallel: false
+
+# Basic run configuration
+base_run_name: modernbert-dna-ntv2-finetuning
+default_seed: 42
+precision: amp_fp16
+
+# Data configuration
+data_dir: ${finetuning_datasets_base_path}/NTv2
+data_format: ntv2
+
+# Tokenizer - will be set by run script based on model type
+tokenizer_name: null
+
+# Model configuration
+model:
+  name: flex_bert
+  pretrained_model_name: ${tokenizer_name}
+  tokenizer_name: ${tokenizer_name}
+  # Pretrained checkpoint - will be overridden by run script
+  pretrained_checkpoint: null
+  model_config:
+    normalization: layernorm
+    deterministic_fa2: false
+    hidden_act: gelu
+    use_fa2: true
+    sliding_window: 128
+    global_attn_every_n_layers: 3
+    use_sdpa_attn_mask: false
+    tie_word_embeddings: false
+
+# Optimizer configuration
+optimizer:
+  name: decoupled_adamw
+  lr: 2.0e-05
+  betas: [0.9, 0.98]
+  eps: 1.0e-06
+  weight_decay: 1.0e-05
+
+# Scheduler configuration
+scheduler:
+  name: constant_with_warmup
+  t_warmup: 0.06dur
+
+# Training configuration
+max_duration: 5ep
+eval_interval: 0.5ep
+global_train_batch_size: 64
+global_eval_batch_size: 64
+device_train_microbatch_size: auto
+device_eval_batch_size: auto
+
+# Evaluation configuration
+eval_first: false
+eval_subset_num_batches: -1
+
+# Logging configuration
+progress_bar: true
+log_to_console: true
+console_log_interval: 10ba
+
+# Checkpoint configuration  
+save_interval: 1ep
+save_num_checkpoints_to_keep: 2
+save_overwrite: true
+load_weights_only: true
+
+# Callbacks
+callbacks:
+  lr_monitor: {}
+  speed_monitor: {}
+
+# Task-specific configurations
+tasks:
+  # Histone modification tasks (600bp sequences)
+  H2AFZ:
+    train_loader:
+      max_seq_len: 600
+    eval_loader:
+      max_seq_len: 600
+    num_labels: 2
+    
+  H3K27ac:
+    train_loader:
+      max_seq_len: 600
+    eval_loader:
+      max_seq_len: 600
+    num_labels: 2
+    
+  H3K27me3:
+    train_loader:
+      max_seq_len: 600
+    eval_loader:
+      max_seq_len: 600
+    num_labels: 2
+    
+  H3K36me3:
+    train_loader:
+      max_seq_len: 600
+    eval_loader:
+      max_seq_len: 600
+    num_labels: 2
+    
+  H3K4me1:
+    train_loader:
+      max_seq_len: 600
+    eval_loader:
+      max_seq_len: 600
+    num_labels: 2
+    
+  H3K4me2:
+    train_loader:
+      max_seq_len: 600
+    eval_loader:
+      max_seq_len: 600
+    num_labels: 2
+    
+  H3K4me3:
+    train_loader:
+      max_seq_len: 600
+    eval_loader:
+      max_seq_len: 600
+    num_labels: 2
+    
+  H3K9ac:
+    train_loader:
+      max_seq_len: 600
+    eval_loader:
+      max_seq_len: 600
+    num_labels: 2
+    
+  H3K9me3:
+    train_loader:
+      max_seq_len: 600
+    eval_loader:
+      max_seq_len: 600
+    num_labels: 2
+    
+  H4K20me1:
+    train_loader:
+      max_seq_len: 600
+    eval_loader:
+      max_seq_len: 600
+    num_labels: 2
+  
+  # Enhancer tasks (200bp sequences)
+  enhancers:
+    train_loader:
+      max_seq_len: 200
+    eval_loader:
+      max_seq_len: 200
+    num_labels: 2
+    
+  enhancers_types:
+    train_loader:
+      max_seq_len: 200
+    eval_loader:
+      max_seq_len: 200
+    num_labels: 3
+  
+  # Promoter tasks (300bp sequences)
+  promoter_all:
+    train_loader:
+      max_seq_len: 300
+    eval_loader:
+      max_seq_len: 300
+    num_labels: 2
+    
+  promoter_no_tata:
+    train_loader:
+      max_seq_len: 300
+    eval_loader:
+      max_seq_len: 300
+    num_labels: 2
+    
+  promoter_tata:
+    train_loader:
+      max_seq_len: 300
+    eval_loader:
+      max_seq_len: 300
+    num_labels: 2
+  
+  # Splice site tasks (400bp sequences)
+  splice_sites_acceptors:
+    train_loader:
+      max_seq_len: 400
+    eval_loader:
+      max_seq_len: 400
+    num_labels: 2
+    
+  splice_sites_all:
+    train_loader:
+      max_seq_len: 400
+    eval_loader:
+      max_seq_len: 400
+    num_labels: 3
+    
+  splice_sites_donors:
+    train_loader:
+      max_seq_len: 400
+    eval_loader:
+      max_seq_len: 400
+    num_labels: 2

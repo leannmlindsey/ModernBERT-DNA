@@ -31,23 +31,21 @@ if [[ ! " ${VALID_TASKS[@]} " =~ " ${TASK_NAME} " ]]; then
     exit 1
 fi
 
-# Select base config and model path based on model type
+# Use consolidated YAML config
+CONFIG_FILE="yamls/dna_finetuning/gb.yaml"
+
+# Select model path based on model type
 if [ "$MODEL_TYPE" == "char" ]; then
-    BASE_CONFIG="yamls/dna_finetuning/gb/gb_base.yaml"
     TOKENIZER="dna_char"
     MODEL_PATH="./checkpoints/modernbert-dna-base-char/checkpoint.pt"
     VOCAB_SIZE=10
     echo "Using character-level tokenization"
 else
-    BASE_CONFIG="yamls/dna_finetuning/gb/gb_base.yaml"
     TOKENIZER="zhihan1996/DNABERT-2-117M"
     MODEL_PATH="./checkpoints/modernbert-dna-base-bpe/checkpoint.pt"
     VOCAB_SIZE=4096
     echo "Using BPE tokenization"
 fi
-
-# GB task config
-TASK_CONFIG="yamls/dna_finetuning/gb/gb_tasks.yaml"
 
 # Create output directory
 OUTPUT_DIR="outputs/gb/${TASK_NAME}_${MODEL_TYPE}"
@@ -55,15 +53,13 @@ mkdir -p $OUTPUT_DIR
 
 # Run training
 echo "Running GB fine-tuning for task: $TASK_NAME"
-echo "Base config: $BASE_CONFIG"
-echo "Task config: $TASK_CONFIG"
+echo "Config file: $CONFIG_FILE"
 echo "Output directory: $OUTPUT_DIR"
 echo "Additional arguments: $ADDITIONAL_ARGS"
 
-# Merge configs and run training
+# Run training with consolidated config
 python dna_sequence_classification.py \
-    $BASE_CONFIG \
-    $TASK_CONFIG \
+    $CONFIG_FILE \
     task_name=$TASK_NAME \
     tokenizer_name=$TOKENIZER \
     model.tokenizer_name=$TOKENIZER \

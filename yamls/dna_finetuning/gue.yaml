@@ -1,0 +1,290 @@
+# Configuration for all Genome Understanding Evaluation (GUE) tasks
+# GUE: 28 datasets across 7 tasks for multi-species genome understanding
+
+# Whether to run tasks serially or in parallel
+parallel: false
+
+# Basic run configuration
+base_run_name: modernbert-dna-gue-finetuning
+default_seed: 42
+precision: amp_fp16
+
+# Data configuration
+data_dir: ${finetuning_datasets_base_path}/GUE
+data_format: gue
+
+# Tokenizer - will be set by run script based on model type
+tokenizer_name: null
+
+# Model configuration
+model:
+  name: flex_bert
+  pretrained_model_name: ${tokenizer_name}
+  tokenizer_name: ${tokenizer_name}
+  # Pretrained checkpoint - will be overridden by run script
+  pretrained_checkpoint: null
+  model_config:
+    normalization: layernorm
+    deterministic_fa2: false
+    hidden_act: gelu
+    use_fa2: true
+    sliding_window: 128
+    global_attn_every_n_layers: 3
+    use_sdpa_attn_mask: false
+    tie_word_embeddings: false
+
+# Optimizer configuration
+optimizer:
+  name: decoupled_adamw
+  lr: 2.0e-05
+  betas: [0.9, 0.98]
+  eps: 1.0e-06
+  weight_decay: 1.0e-05
+
+# Scheduler configuration
+scheduler:
+  name: constant_with_warmup
+  t_warmup: 0.06dur
+
+# Training configuration
+max_duration: 10ep
+eval_interval: 1ep
+global_train_batch_size: 64
+global_eval_batch_size: 64
+device_train_microbatch_size: auto
+device_eval_batch_size: auto
+
+# Evaluation configuration
+eval_first: false
+eval_subset_num_batches: -1
+
+# Logging configuration
+progress_bar: true
+log_to_console: true
+console_log_interval: 10ba
+
+# Checkpoint configuration  
+save_interval: 1ep
+save_num_checkpoints_to_keep: 2
+save_overwrite: true
+load_weights_only: true
+
+# Callbacks
+callbacks:
+  lr_monitor: {}
+  speed_monitor: {}
+
+# Task-specific configurations
+tasks:
+  # EMP tasks (Epigenetic Marks Prediction) - 2388bp sequences
+  human_h3:
+    train_loader:
+      max_seq_len: 2388
+    eval_loader:
+      max_seq_len: 2388
+    num_labels: 2
+    
+  human_h3k14ac:
+    train_loader:
+      max_seq_len: 2388
+    eval_loader:
+      max_seq_len: 2388
+    num_labels: 2
+    
+  human_h3k36me3:
+    train_loader:
+      max_seq_len: 2388
+    eval_loader:
+      max_seq_len: 2388
+    num_labels: 2
+    
+  human_h3k4me1:
+    train_loader:
+      max_seq_len: 2388
+    eval_loader:
+      max_seq_len: 2388
+    num_labels: 2
+    
+  human_h3k4me2:
+    train_loader:
+      max_seq_len: 2388
+    eval_loader:
+      max_seq_len: 2388
+    num_labels: 2
+    
+  human_h3k4me3:
+    train_loader:
+      max_seq_len: 2388
+    eval_loader:
+      max_seq_len: 2388
+    num_labels: 2
+    
+  human_h3k79me3:
+    train_loader:
+      max_seq_len: 2388
+    eval_loader:
+      max_seq_len: 2388
+    num_labels: 2
+    
+  human_h3k9ac:
+    train_loader:
+      max_seq_len: 2388
+    eval_loader:
+      max_seq_len: 2388
+    num_labels: 2
+    
+  human_h4:
+    train_loader:
+      max_seq_len: 2388
+    eval_loader:
+      max_seq_len: 2388
+    num_labels: 2
+    
+  human_h4ac:
+    train_loader:
+      max_seq_len: 2388
+    eval_loader:
+      max_seq_len: 2388
+    num_labels: 2
+  
+  # Mouse enhancer tasks - 3231bp sequences
+  mouse_0:
+    train_loader:
+      max_seq_len: 3231
+    eval_loader:
+      max_seq_len: 3231
+    num_labels: 2
+    
+  mouse_1:
+    train_loader:
+      max_seq_len: 3231
+    eval_loader:
+      max_seq_len: 3231
+    num_labels: 2
+    
+  mouse_2:
+    train_loader:
+      max_seq_len: 3231
+    eval_loader:
+      max_seq_len: 3231
+    num_labels: 2
+    
+  mouse_3:
+    train_loader:
+      max_seq_len: 3231
+    eval_loader:
+      max_seq_len: 3231
+    num_labels: 2
+    
+  mouse_4:
+    train_loader:
+      max_seq_len: 3231
+    eval_loader:
+      max_seq_len: 3231
+    num_labels: 2
+  
+  # Promoter tasks - varying lengths
+  prom_300_all:
+    train_loader:
+      max_seq_len: 300
+    eval_loader:
+      max_seq_len: 300
+    num_labels: 2
+    
+  prom_300_notata:
+    train_loader:
+      max_seq_len: 300
+    eval_loader:
+      max_seq_len: 300
+    num_labels: 2
+    
+  prom_300_tata:
+    train_loader:
+      max_seq_len: 300
+    eval_loader:
+      max_seq_len: 300
+    num_labels: 2
+    
+  prom_core_all:
+    train_loader:
+      max_seq_len: 70
+    eval_loader:
+      max_seq_len: 70
+    num_labels: 2
+    
+  prom_core_notata:
+    train_loader:
+      max_seq_len: 70
+    eval_loader:
+      max_seq_len: 70
+    num_labels: 2
+    
+  prom_core_tata:
+    train_loader:
+      max_seq_len: 70
+    eval_loader:
+      max_seq_len: 70
+    num_labels: 2
+  
+  # Splice site task - 398bp sequences
+  splice_reconstructed:
+    train_loader:
+      max_seq_len: 398
+    eval_loader:
+      max_seq_len: 398
+    num_labels: 3
+  
+  # TF binding tasks - 101bp sequences
+  tf_0:
+    train_loader:
+      max_seq_len: 101
+    eval_loader:
+      max_seq_len: 101
+    num_labels: 2
+    
+  tf_1:
+    train_loader:
+      max_seq_len: 101
+    eval_loader:
+      max_seq_len: 101
+    num_labels: 2
+    
+  tf_2:
+    train_loader:
+      max_seq_len: 101
+    eval_loader:
+      max_seq_len: 101
+    num_labels: 2
+    
+  tf_3:
+    train_loader:
+      max_seq_len: 101
+    eval_loader:
+      max_seq_len: 101
+    num_labels: 2
+    
+  tf_4:
+    train_loader:
+      max_seq_len: 101
+    eval_loader:
+      max_seq_len: 101
+    num_labels: 2
+  
+  # Virus task - 10269bp sequences
+  virus_covid:
+    train_loader:
+      max_seq_len: 10269
+    eval_loader:
+      max_seq_len: 10269
+    num_labels: 2
+    # This task may need special handling due to long sequences
+    # Consider adjusting batch size or using gradient accumulation
+    
+  # Long-range tasks (if using GUE+)
+  # Note: These require much longer sequences and may need special handling
+  # human_long_enhancers:
+  #   train_loader:
+  #     max_seq_len: 10000
+  #   eval_loader:
+  #     max_seq_len: 10000
+  #   num_labels: 2
