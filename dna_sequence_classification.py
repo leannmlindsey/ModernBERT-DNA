@@ -376,7 +376,13 @@ def build_dna_dataloader(cfg: DictConfig, device_batch_size: int, tokenizer):
     data_format = cfg.get("data_format", "ntv2")
     
     # Build data path
-    data_dir = cfg.get("data_dir", "../DATA")
+    # Get the base path from config, with no default fallback to ensure it's always specified
+    data_dir = cfg.get("data_dir")
+    if data_dir is None:
+        raise ValueError(
+            "data_dir must be specified in the configuration. "
+            "Please ensure your config includes data_dir or inherits from a base config that does."
+        )
     split_name = "dev" if cfg.split == "validation" else cfg.split
     
     # Handle GUE task subdirectory structure
