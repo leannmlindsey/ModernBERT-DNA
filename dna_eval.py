@@ -203,22 +203,25 @@ def run_job_worker(
         scheduler = None
     
     # Build the job
-    job = TASK_NAME_TO_CLASS[job_name](
-        model=model,
-        tokenizer_name=cfg["tokenizer_name"],
-        dataset_base_path=cfg["dataset_base_path"],
-        batch_size=job_cfg.get("batch_size", cfg["default_batch_size"]),
-        seed=job_cfg.get("seed", cfg["seed"]),
-        scheduler=scheduler,
-        optimizer=optimizer,
-        callbacks=callbacks,
-        loggers=loggers,
-        max_duration=job_cfg.get("max_duration", cfg.get("max_duration", "5ep")),
-        eval_interval=job_cfg.get("eval_interval", cfg.get("eval_interval", "1ep")),
-        save_folder=job_cfg.get("save_folder", None),
-        precision=cfg.get("precision", None),
-        **job_cfg,
-    )
+    # Extract specific args to avoid duplicates
+    job_args = {
+        "model": model,
+        "tokenizer_name": cfg["tokenizer_name"],
+        "dataset_base_path": cfg["dataset_base_path"],
+        "batch_size": job_cfg.get("batch_size", cfg["default_batch_size"]),
+        "seed": job_cfg.get("seed", cfg["seed"]),
+        "scheduler": scheduler,
+        "optimizer": optimizer,
+        "callbacks": callbacks,
+        "loggers": loggers,
+        "max_duration": job_cfg.get("max_duration", cfg.get("max_duration", "5ep")),
+        "eval_interval": job_cfg.get("eval_interval", cfg.get("eval_interval", "1ep")),
+        "save_folder": job_cfg.get("save_folder", None),
+        "precision": cfg.get("precision", None),
+        "max_sequence_length": job_cfg.get("max_sequence_length"),
+    }
+    
+    job = TASK_NAME_TO_CLASS[job_name](**job_args)
     
     # Train the job
     trainer = job.trainer()
