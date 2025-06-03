@@ -48,6 +48,7 @@ default_batch_size: 32
 max_duration: 5ep
 eval_interval: 1ep
 skip_training: false  # Set to true for zero-shot evaluation
+eval_on_test: false  # Set to true to evaluate on test set with all metrics
 # Note: The pretrained checkpoint contains only the base model weights (MLM).
 # The classification head will be randomly initialized for fine-tuning.
 

@@ -24,7 +24,10 @@ import src.hf_bert as hf_bert_module
 import src.mosaic_bert as mosaic_bert_module
 import src.flex_bert as flex_bert_module
 from src.dna_checkpoint_utils import load_pretrained_dna_model
+from src.evals.dna_test_eval import evaluate_on_test_set, print_test_metrics
+from src.evals.dna_data import NTV2_TASK_CONFIG
 import torch
+import transformers
 from composer import algorithms
 from composer.callbacks import (
     LRMonitor,
@@ -231,6 +234,40 @@ def run_job_worker(
     else:
         trainer.fit()
         eval_metrics = trainer.state.eval_metrics
+    
+    # Optionally evaluate on test set with comprehensive metrics
+    if cfg.get("eval_on_test", False):
+        # Create test dataloader
+        from src.evals.dna_data import create_ntv2_dataset
+        test_dataset = create_ntv2_dataset(
+            task=job_name,
+            tokenizer_name=cfg["tokenizer_name"],
+            split="test",
+            dataset_base_path=cfg["dataset_base_path"],
+            max_seq_length=job_cfg.get("max_sequence_length", 512)
+        )
+        test_dataloader = torch.utils.data.DataLoader(
+            test_dataset,
+            batch_size=job_cfg.get("batch_size", cfg["default_batch_size"]),
+            collate_fn=transformers.default_data_collator,
+            num_workers=4,
+            pin_memory=True,
+        )
+        
+        # Get test metrics
+        test_metrics = evaluate_on_test_set(
+            model=trainer.state.model,
+            test_dataloader=test_dataloader,
+            task_name=job_name,
+            num_labels=NTV2_TASK_CONFIG[job_name]["num_labels"],
+            device=trainer.state.device
+        )
+        
+        # Print test metrics
+        print_test_metrics(test_metrics, job_name)
+        
+        # Add test metrics to eval_metrics
+        eval_metrics["test"] = test_metrics
     
     # Update metrics
     if metrics is not None:

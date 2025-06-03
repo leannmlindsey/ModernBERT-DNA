@@ -110,11 +110,20 @@ class NTv2Job(ClassificationJob):
         
         # Create eval dataloader
         eval_dataset = create_ntv2_dataset(split="validation", **dataset_kwargs)
+        
+        # Set up metrics based on number of labels
+        if self.num_labels == 2:
+            # Binary classification metrics
+            metric_names = ["MulticlassAccuracy", "MatthewsCorrCoef", "BinaryF1Score"]
+        else:
+            # Multi-class metrics (3+ classes)
+            metric_names = ["MulticlassAccuracy", "MatthewsCorrCoef"]
+        
         self.evaluators = [
             Evaluator(
                 label=f"ntv2_{task_name}",
                 dataloader=build_dataloader(eval_dataset, **dataloader_kwargs),
-                metric_names=["MulticlassAccuracy"],
+                metric_names=metric_names,
             )
         ]
 
