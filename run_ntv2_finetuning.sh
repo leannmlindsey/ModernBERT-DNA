@@ -43,13 +43,15 @@ fi
 if [ "$MODEL_TYPE" == "char" ]; then
     BASE_CONFIG="yamls/dna_finetuning/ntv2/ntv2_base.yaml"
     TOKENIZER="dna_char"
-    MODEL_PATH="./checkpoints/modernbert-dna-base-char/checkpoint.pt"
+    #MODEL_PATH="./checkpoints/modernbert-dna-base-char/checkpoint.pt"
+    MODEL_PATH="/data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/dnamodernbertbase/checkpoints/dna-char-modernbert-basemod-pretrain-4gpu/ep0-ba70000-rank0.pt"
     VOCAB_SIZE=10
     echo "Using character-level tokenization"
 else
     BASE_CONFIG="yamls/dna_finetuning/ntv2/ntv2_base.yaml"
     TOKENIZER="zhihan1996/DNABERT-2-117M"
-    MODEL_PATH="./checkpoints/modernbert-dna-base-bpe/checkpoint.pt"
+    #MODEL_PATH="./checkpoints/modernbert-dna-base-bpe/checkpoint.pt"
+    MODEL_PATH="/data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/dnamodernbertbase/checkpoints/dna-modernbert-basemod-pretrain-4gpu/ep2-ba52000-rank0.pt"
     VOCAB_SIZE=4096
     echo "Using BPE tokenization"
 fi

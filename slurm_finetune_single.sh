@@ -29,9 +29,7 @@ module load cuda/11.8  # Adjust based on your CUDA requirements
 module load gcc/11.3.0
 
 # Activate conda environment
-source /data/$USER/conda/etc/profile.d/conda.sh
-conda activate bert24
-
+conda activate bert24_2
 # Change to project directory
 cd /data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT-DNA
 
