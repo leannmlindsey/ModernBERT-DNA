@@ -54,6 +54,12 @@ global_eval_batch_size: 64
 device_train_microbatch_size: auto
 device_eval_batch_size: auto
 
+# Data split configuration
+train_loader:
+  split: train
+eval_loader:
+  split: validation
+
 # Evaluation configuration
 eval_first: false
 eval_subset_num_batches: -1
