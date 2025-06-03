@@ -495,23 +495,28 @@ def train(cfg: DictConfig, return_trainer: bool = False, do_train: bool = True) 
 
     # Dataloaders - build train first to get num_labels
     print("Building train loader...")
+    # Merge train_loader config with top-level config for access to task_name and other fields
+    train_loader_cfg = om.merge(cfg, cfg.train_loader) if "train_loader" in cfg else cfg
     train_loader = build_dna_dataloader(
-        cfg.train_loader,
+        train_loader_cfg,
         cfg.global_train_batch_size // dist.get_world_size(),
         tokenizer,
     )
     
     # Build Model (after dataloader so we have num_labels)
     print("Initializing model...")
-    cfg.model.num_labels = cfg.train_loader.num_labels
+    # Get num_labels from the merged config (which includes task-specific settings)
+    cfg.model.num_labels = train_loader_cfg.get("num_labels", 2)  # Default to binary classification
     model = build_model(cfg.model)
     n_params = sum(p.numel() for p in model.parameters())
     print(f"{n_params=:.4e}")
     
     print("Building eval loader...")
     global_eval_batch_size = cfg.get("global_eval_batch_size", cfg.global_train_batch_size)
+    # Merge eval_loader config with top-level config for access to task_name and other fields
+    eval_loader_cfg = om.merge(cfg, cfg.eval_loader) if "eval_loader" in cfg else cfg
     eval_loader = build_dna_dataloader(
-        cfg.eval_loader,
+        eval_loader_cfg,
         cfg.get("device_eval_batch_size", global_eval_batch_size // dist.get_world_size()),
         tokenizer,
     )
