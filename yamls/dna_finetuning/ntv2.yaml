@@ -6,7 +6,7 @@ parallel: false
 
 # Basic run configuration
 base_run_name: modernbert-dna-ntv2-finetuning
-default_seed: 42
+seed: 42
 precision: amp_fp16
 
 # Data configuration
