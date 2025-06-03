@@ -286,10 +286,20 @@ def main(cfg: dict):
         
         # Print results
         print(f"Results for {job_name}:")
-        for metric_name, metric_value in job_metrics.items():
-            if isinstance(metric_value, torch.Tensor):
-                metric_value = metric_value.item()
-            print(f"  {metric_name}: {metric_value:.4f}")
+        if isinstance(job_metrics, dict):
+            for metric_name, metric_value in job_metrics.items():
+                if isinstance(metric_value, dict):
+                    # Handle nested metric dictionaries
+                    for sub_metric_name, sub_metric_value in metric_value.items():
+                        if isinstance(sub_metric_value, torch.Tensor):
+                            sub_metric_value = sub_metric_value.item()
+                        if isinstance(sub_metric_value, (int, float)):
+                            print(f"  {metric_name}/{sub_metric_name}: {sub_metric_value:.4f}")
+                else:
+                    if isinstance(metric_value, torch.Tensor):
+                        metric_value = metric_value.item()
+                    if isinstance(metric_value, (int, float)):
+                        print(f"  {metric_name}: {metric_value:.4f}")
     
     # Print summary
     print("\n" + "="*60)
@@ -297,13 +307,23 @@ def main(cfg: dict):
     print("="*60)
     for job_name, job_metrics in metrics.items():
         accuracy = None
-        for metric_name, metric_value in job_metrics.items():
-            if "accuracy" in metric_name.lower():
-                if isinstance(metric_value, torch.Tensor):
-                    accuracy = metric_value.item()
-                else:
-                    accuracy = metric_value
-                break
+        if isinstance(job_metrics, dict):
+            for metric_name, metric_value in job_metrics.items():
+                if isinstance(metric_value, dict):
+                    # Check nested metrics
+                    for sub_metric_name, sub_metric_value in metric_value.items():
+                        if "accuracy" in sub_metric_name.lower():
+                            if isinstance(sub_metric_value, torch.Tensor):
+                                accuracy = sub_metric_value.item()
+                            elif isinstance(sub_metric_value, (int, float)):
+                                accuracy = sub_metric_value
+                            break
+                elif "accuracy" in metric_name.lower():
+                    if isinstance(metric_value, torch.Tensor):
+                        accuracy = metric_value.item()
+                    elif isinstance(metric_value, (int, float)):
+                        accuracy = metric_value
+                    break
         if accuracy is not None:
             print(f"{job_name}: {accuracy:.4f}")
     
