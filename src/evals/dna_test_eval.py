@@ -40,15 +40,28 @@ def evaluate_on_test_set(
             batch = {k: v.to(device) if isinstance(v, torch.Tensor) else v for k, v in batch.items()}
             
             # Get model predictions
+            # Handle HuggingFaceModel wrapper which uses 'label' instead of 'labels'
+            if 'labels' in batch and 'label' not in batch:
+                batch['label'] = batch.pop('labels')
+            
             outputs = model(**batch)
-            logits = outputs.logits if hasattr(outputs, 'logits') else outputs
+            
+            # Extract logits from output
+            if hasattr(outputs, 'logits'):
+                logits = outputs.logits
+            elif isinstance(outputs, dict) and 'logits' in outputs:
+                logits = outputs['logits']
+            elif isinstance(outputs, tuple):
+                logits = outputs[0]
+            else:
+                logits = outputs
             
             # Get predictions
             predictions = torch.argmax(logits, dim=-1)
             
             # Collect predictions and labels
             all_predictions.extend(predictions.cpu().numpy())
-            all_labels.extend(batch['labels'].cpu().numpy())
+            all_labels.extend(batch['label'].cpu().numpy())
     
     # Convert to numpy arrays
     all_predictions = np.array(all_predictions)
