@@ -23,6 +23,7 @@ import src.evals.dna_jobs as dna_jobs_module
 import src.hf_bert as hf_bert_module
 import src.mosaic_bert as mosaic_bert_module
 import src.flex_bert as flex_bert_module
+from src.dna_checkpoint_utils import load_pretrained_dna_model
 import torch
 from composer import algorithms
 from composer.callbacks import (
@@ -148,15 +149,25 @@ def run_job_worker(
         "model_config": model_cfg.get("model_config", {}),
         "tokenizer_name": model_cfg.get("tokenizer_name"),
         "gradient_checkpointing": model_cfg.get("gradient_checkpointing", False),
-        "pretrained_checkpoint": model_cfg.get("pretrained_checkpoint"),
     }
     
+    checkpoint_path = model_cfg.get("pretrained_checkpoint")
+    
     if model_name == "flex_bert":
-        model = flex_bert_module.create_flex_bert_classification(**model_args)
+        if checkpoint_path:
+            model = load_pretrained_dna_model(flex_bert_module, model_args, checkpoint_path)
+        else:
+            model = flex_bert_module.create_flex_bert_classification(**model_args)
     elif model_name == "mosaic_bert":
-        model = mosaic_bert_module.create_mosaic_bert_classification(**model_args)
+        if checkpoint_path:
+            model = load_pretrained_dna_model(mosaic_bert_module, model_args, checkpoint_path)
+        else:
+            model = mosaic_bert_module.create_mosaic_bert_classification(**model_args)
     elif model_name == "hf_bert":
-        model = hf_bert_module.create_hf_bert_classification(**model_args)
+        if checkpoint_path:
+            model = load_pretrained_dna_model(hf_bert_module, model_args, checkpoint_path)
+        else:
+            model = hf_bert_module.create_hf_bert_classification(**model_args)
     else:
         raise ValueError(f"Model {model_name} not supported")
     
