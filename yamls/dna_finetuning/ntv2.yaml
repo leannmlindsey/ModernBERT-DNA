@@ -19,7 +19,7 @@ tokenizer_name: null
 # Model configuration
 model:
   name: flex_bert
-  pretrained_model_name: ${tokenizer_name}
+  pretrained_model_name: bert-base-uncased  # Base config for FlexBERT architecture
   tokenizer_name: ${tokenizer_name}
   # Pretrained checkpoint - will be overridden by run script
   pretrained_checkpoint: null

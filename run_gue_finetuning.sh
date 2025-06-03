@@ -79,7 +79,6 @@ python dna_sequence_classification.py \
     task_name=$TASK_NAME \
     tokenizer_name=$TOKENIZER \
     model.tokenizer_name=$TOKENIZER \
-    model.pretrained_model_name=$TOKENIZER \
     model.pretrained_checkpoint=$MODEL_PATH \
     model.model_config.vocab_size=$VOCAB_SIZE \
     save_folder=$OUTPUT_DIR/checkpoints \
