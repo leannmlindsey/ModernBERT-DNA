@@ -1,0 +1,139 @@
+# Configuration for evaluating pretrained DNA models on NTv2 benchmarks
+
+# Dataset configuration
+dataset_base_path: /data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/Finetuning_Datasets
+
+# Which tasks to evaluate (comment out to run all)
+eval_tasks:
+  - H3K27ac  # Start with one task for testing
+  # - H2AFZ
+  # - H3K27me3
+  # - H3K36me3
+  # - H3K4me1
+  # - H3K4me2
+  # - H3K4me3
+  # - H3K9ac
+  # - H3K9me3
+  # - H4K20me1
+  # - enhancers
+  # - enhancers_types
+  # - promoter_all
+  # - promoter_no_tata
+  # - promoter_tata
+  # - splice_sites_acceptors
+  # - splice_sites_all
+  # - splice_sites_donors
+
+# Model configuration (will be overridden by command line)
+model:
+  name: flex_bert
+  pretrained_model_name: bert-base-uncased
+  tokenizer_name: ${tokenizer_name}
+  pretrained_checkpoint: ${pretrained_checkpoint}
+  model_config:
+    normalization: layernorm
+    deterministic_fa2: false
+    hidden_act: gelu
+    use_fa2: true
+    sliding_window: 128
+    global_attn_every_n_layers: 3
+    use_sdpa_attn_mask: false
+    tie_word_embeddings: false
+    vocab_size: ${vocab_size}
+
+# Training configuration
+seed: 42
+precision: amp_fp16
+default_batch_size: 32
+max_duration: 5ep
+eval_interval: 1ep
+skip_training: false  # Set to true for zero-shot evaluation
+
+# Scheduler configuration
+scheduler:
+  name: constant_with_warmup
+  t_warmup: 0.06dur
+
+# Callbacks
+callbacks:
+  lr_monitor: {}
+  speed_monitor:
+    window_size: 50
+
+# Job-specific configurations
+jobs:
+  # Histone modification tasks (600bp sequences)
+  H2AFZ:
+    batch_size: 32
+    max_sequence_length: 600
+    
+  H3K27ac:
+    batch_size: 32
+    max_sequence_length: 600
+    
+  H3K27me3:
+    batch_size: 32
+    max_sequence_length: 600
+    
+  H3K36me3:
+    batch_size: 32
+    max_sequence_length: 600
+    
+  H3K4me1:
+    batch_size: 32
+    max_sequence_length: 600
+    
+  H3K4me2:
+    batch_size: 32
+    max_sequence_length: 600
+    
+  H3K4me3:
+    batch_size: 32
+    max_sequence_length: 600
+    
+  H3K9ac:
+    batch_size: 32
+    max_sequence_length: 600
+    
+  H3K9me3:
+    batch_size: 32
+    max_sequence_length: 600
+    
+  H4K20me1:
+    batch_size: 32
+    max_sequence_length: 600
+  
+  # Enhancer tasks (200bp sequences)
+  enhancers:
+    batch_size: 64
+    max_sequence_length: 200
+    
+  enhancers_types:
+    batch_size: 64
+    max_sequence_length: 200
+  
+  # Promoter tasks (300bp sequences)
+  promoter_all:
+    batch_size: 64
+    max_sequence_length: 300
+    
+  promoter_no_tata:
+    batch_size: 64
+    max_sequence_length: 300
+    
+  promoter_tata:
+    batch_size: 64
+    max_sequence_length: 300
+  
+  # Splice site tasks (400bp sequences)
+  splice_sites_acceptors:
+    batch_size: 32
+    max_sequence_length: 400
+    
+  splice_sites_all:
+    batch_size: 32
+    max_sequence_length: 400
+    
+  splice_sites_donors:
+    batch_size: 32
+    max_sequence_length: 400
