@@ -29,7 +29,7 @@ from composer.optim.scheduler import (
     CosineAnnealingWithWarmupScheduler,
     LinearWithWarmupScheduler,
 )
-from composer.metrics import MulticlassAccuracy
+# Metrics will be passed as strings to Evaluator
 from src.scheduler import WarmupStableDecayScheduler
 from composer.utils import dist, reproducibility
 from omegaconf import DictConfig
@@ -513,7 +513,7 @@ def train(cfg: DictConfig, return_trainer: bool = False, do_train: bool = True) 
         label="eval",
         dataloader=eval_loader,
         device_eval_microbatch_size=cfg.get("device_eval_microbatch_size", None),
-        metrics=[MulticlassAccuracy(num_classes=cfg.model.num_labels)]
+        metric_names=["MulticlassAccuracy"]
     )
 
     # Optimizer
