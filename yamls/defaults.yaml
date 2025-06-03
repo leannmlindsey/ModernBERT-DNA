@@ -1,3 +1,6 @@
+# Base path for all finetuning datasets
+finetuning_datasets_base_path: /data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/Finetuning_Datasets
+
 model:
   name: mosaic_bert
   model_config:

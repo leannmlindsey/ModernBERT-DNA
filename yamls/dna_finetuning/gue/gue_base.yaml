@@ -6,7 +6,7 @@ precision: amp_fp16
 seed: 42
 
 # Data paths
-data_dir: /data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/Finetuning_Datasets/GUE
+data_dir: ${finetuning_datasets_base_path}/GUE
 
 # Model configuration
 model:
