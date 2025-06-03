@@ -57,8 +57,14 @@ device_eval_batch_size: auto
 # Data split configuration
 train_loader:
   split: train
+  shuffle: true
+  drop_last: true
+  num_workers: 8
 eval_loader:
   split: validation
+  shuffle: false
+  drop_last: false
+  num_workers: 8
 
 # Evaluation configuration
 eval_first: false
