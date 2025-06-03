@@ -32,6 +32,9 @@ fi
 OUTPUT_DIR="outputs/dna_eval/ntv2_${MODEL_TYPE}_$(date +%Y%m%d_%H%M%S)"
 mkdir -p $OUTPUT_DIR
 
+# Set environment variable to avoid tokenizer warnings
+export TOKENIZERS_PARALLELISM=false
+
 # Run evaluation
 echo "Running DNA evaluation on NTv2 benchmarks"
 echo "Config file: $CONFIG_FILE"

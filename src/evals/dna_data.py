@@ -160,22 +160,55 @@ def create_dna_dataset(
     
     # Create tokenization function
     if tokenize_fn_factory is None:
-        if hasattr(tokenizer, '__call__'):
+        if hasattr(tokenizer, '__call__') and hasattr(tokenizer, 'max_len'):
             # DNACharacterTokenizer
-            tokenize_fn_factory = lambda tokenizer, max_seq_length: lambda inp: {
-                "input_ids": [tokenizer(seq, max_length=max_seq_length)["input_ids"] for seq in inp["text"]],
-                "attention_mask": [[1] * len(tokenizer(seq, max_length=max_seq_length)["input_ids"]) for seq in inp["text"]],
-                "label": inp["label"]
-            }
+            def tokenize_fn_factory(tokenizer, max_seq_length):
+                def tokenize_fn(inp):
+                    input_ids_list = []
+                    attention_mask_list = []
+                    
+                    for seq in inp["text"]:
+                        # Tokenize and get input_ids
+                        token_output = tokenizer(seq, max_length=max_seq_length)
+                        input_ids = token_output["input_ids"]
+                        
+                        # Truncate if necessary
+                        if len(input_ids) > max_seq_length:
+                            input_ids = input_ids[:max_seq_length]
+                        
+                        # Pad if necessary
+                        if len(input_ids) < max_seq_length:
+                            padding_length = max_seq_length - len(input_ids)
+                            input_ids = input_ids + [tokenizer.pad_token_id] * padding_length
+                            attention_mask = [1] * (max_seq_length - padding_length) + [0] * padding_length
+                        else:
+                            attention_mask = [1] * max_seq_length
+                        
+                        input_ids_list.append(input_ids)
+                        attention_mask_list.append(attention_mask)
+                    
+                    return {
+                        "input_ids": input_ids_list,
+                        "attention_mask": attention_mask_list,
+                        "label": inp["label"]
+                    }
+                return tokenize_fn
         else:
             # HuggingFace tokenizer
-            tokenize_fn_factory = lambda tokenizer, max_seq_length: lambda inp: tokenizer(
-                text=inp["text"],
-                padding="max_length",
-                max_length=max_seq_length,
-                truncation=True,
-                return_tensors=None,
-            )
+            def tokenize_fn_factory(tokenizer, max_seq_length):
+                def tokenize_fn(inp):
+                    # Tokenize with padding and truncation
+                    encoded = tokenizer(
+                        text=inp["text"],
+                        padding="max_length",
+                        max_length=max_seq_length,
+                        truncation=True,
+                        return_tensors=None,
+                    )
+                    # Add labels to the output
+                    encoded["label"] = inp["label"]
+                    return encoded
+                return tokenize_fn
     
     # Tokenize dataset
     tokenized_dataset = dataset.map(
