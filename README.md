@@ -2,18 +2,6 @@
 
 This repository extends [ModernBERT](https://github.com/AnswerDotAI/ModernBERT) for DNA sequence modeling, implementing both BPE and character-level tokenization strategies.
 
-**If you use any work from this repository, please cite:**
-
-```bibtex
-@article{lindsey2024comparison,
-  title={A Comparison of Tokenization Impact in Attention Based and State Space Genomic Language Models},
-  author={Lindsey, LeAnn M. and Pershing, Nicole L. and Habib, Anisa and Stephens, W. Zac and Blaschke, Anne J. and Sundar, Hari},
-  journal={bioRxiv},
-  year={2024},
-  doi={10.1101/2024.09.09.612081}
-}
-```
-
 ## Overview
 
 This repository adapts the ModernBERT architecture for genomic sequence modeling, supporting:
@@ -170,3 +158,27 @@ outputs/
 ---
 
 For information about the original ModernBERT architecture and implementation, please refer to the [original ModernBERT repository](https://github.com/AnswerDotAI/ModernBERT).
+
+## References
+
+**If you use any work from this repository, please cite:**
+
+```bibtex
+@article{lindsey2024comparison,
+  title={A Comparison of Tokenization Impact in Attention Based and State Space Genomic Language Models},
+  author={Lindsey, LeAnn M. and Pershing, Nicole L. and Habib, Anisa and Stephens, W. Zac and Blaschke, Anne J. and Sundar, Hari},
+  journal={bioRxiv},
+  year={2024},
+  doi={10.1101/2024.09.09.612081}
+}
+
+@misc{modernbert,
+  title={Smarter, Better, Faster, Longer: A Modern Bidirectional Encoder for Fast, Memory Efficient, and Long Context Finetuning and Inference}, 
+  author={Benjamin Warner and Antoine Chaffin and Benjamin Clavié and Orion Weller and Oskar Hallström and Said Taghadouini and Alexis Gallagher and Raja Biswas and Faisal Ladhak and Tom Aarsen and Nathan Cooper and Griffin Adams and Jeremy Howard and Iacopo Poli},
+  year={2024},
+  eprint={2412.13663},
+  archivePrefix={arXiv},
+  primaryClass={cs.CL},
+  url={https://arxiv.org/abs/2412.13663}
+}
+```
