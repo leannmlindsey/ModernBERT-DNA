@@ -19,6 +19,7 @@ EVAL_ON_TEST=${3:-true}  # Default to evaluating on test set
 CUSTOM_TOKENIZER=$4  # Optional custom tokenizer
 OUTPUT_PARENT_DIR=$5  # Optional output parent directory
 SCRIPT_DIR="/data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/scripts/finetuning"
+export WANDB_API_KEY="4231f30cf28322633fb26bdd3b9992cd0a9ce62d”
 
 if [ -z "$BENCHMARK" ]; then
     echo "Error: Missing required benchmark name"
