@@ -1,0 +1,559 @@
+(base) [lindseylm@biowulf GUE]$ tree
+.
+├── EMP
+│   ├── H3
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K14ac
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K36me3
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K4me1
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K4me2
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K4me3
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K79me3
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K9ac
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H4
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   └── H4ac
+│       ├── dev.csv
+│       ├── test.csv
+│       └── train.csv
+├── mouse
+│   ├── 0
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── 1
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── 2
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── 3
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   └── 4
+│       ├── dev.csv
+│       ├── test.csv
+│       └── train.csv
+├── prom
+│   ├── prom_300_all
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── prom_300_notata
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── prom_300_tata
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── prom_core_all
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── prom_core_notata
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   └── prom_core_tata
+│       ├── dev.csv
+│       ├── test.csv
+│       └── train.csv
+├── splice
+│   └── reconstructed
+│       ├── dev.csv
+│       ├── test.csv
+│       └── train.csv
+├── tf
+│   ├── 0
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── 1
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── 2
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── 3
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   └── 4
+│       ├── dev.csv
+│       ├── test.csv
+│       └── train.csv
+└── virus
+    └── covid
+        ├── dev.csv
+        ├── test.csv
+        └── train.csv
+
+34 directories, 84 files
+(base) [lindseylm@biowulf GUE]$ tree
+.
+├── EMP
+│   ├── H3
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K14ac
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K36me3
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K4me1
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K4me2
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K4me3
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K79me3
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K9ac
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H4
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   └── H4ac
+│       ├── dev.csv
+│       ├── test.csv
+│       └── train.csv
+├── mouse
+│   ├── 0
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── 1
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── 2
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── 3
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   └── 4
+│       ├── dev.csv
+│       ├── test.csv
+│       └── train.csv
+├── prom
+│   ├── prom_300_all
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── prom_300_notata
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── prom_300_tata
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── prom_core_all
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── prom_core_notata
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   └── prom_core_tata
+│       ├── dev.csv
+│       ├── test.csv
+│       └── train.csv
+├── splice
+│   └── reconstructed
+│       ├── dev.csv
+│       ├── test.csv
+│       └── train.csv
+├── tf
+│   ├── 0
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── 1
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── 2
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── 3
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   └── 4
+│       ├── dev.csv
+│       ├── test.csv
+│       └── train.csv
+└── virus
+    └── covid
+        ├── dev.csv
+        ├── test.csv
+        └── train.csv
+
+34 directories, 84 files
+(base) [lindseylm@biowulf GUE]$ pwd
+/data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/Finetuning_Datasets/GUE
+(base) [lindseylm@biowulf GUE]$ tree
+.
+├── EMP
+│   ├── H3
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K14ac
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K36me3
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K4me1
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K4me2
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K4me3
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K79me3
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H3K9ac
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── H4
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   └── H4ac
+│       ├── dev.csv
+│       ├── test.csv
+│       └── train.csv
+├── mouse
+│   ├── 0
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── 1
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── 2
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── 3
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   └── 4
+│       ├── dev.csv
+│       ├── test.csv
+│       └── train.csv
+├── prom
+│   ├── prom_300_all
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── prom_300_notata
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── prom_300_tata
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── prom_core_all
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── prom_core_notata
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   └── prom_core_tata
+│       ├── dev.csv
+│       ├── test.csv
+│       └── train.csv
+├── splice
+│   └── reconstructed
+│       ├── dev.csv
+│       ├── test.csv
+│       └── train.csv
+├── tf
+│   ├── 0
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── 1
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── 2
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   ├── 3
+│   │   ├── dev.csv
+│   │   ├── test.csv
+│   │   └── train.csv
+│   └── 4
+│       ├── dev.csv
+│       ├── test.csv
+│       └── train.csv
+└── virus
+    └── covid
+        ├── dev.csv
+        ├── test.csv
+        └── train.csv
+
+34 directories, 84 files
+(base) [lindseylm@biowulf GUE]$ cd ..
+(base) [lindseylm@biowulf Finetuning_Datasets]$ cd NTv2/
+(base) [lindseylm@biowulf NTv2]$ tree
+.
+├── enhancers
+│   ├── dev_6mer.json
+│   ├── dev.csv
+│   ├── test_6mer.json
+│   ├── test.csv
+│   ├── train_6mer.json
+│   ├── train.csv
+│   └── train_plus_dev.csv
+├── enhancers_types
+│   ├── dev_6mer.json
+│   ├── dev.csv
+│   ├── test_6mer.json
+│   ├── test.csv
+│   ├── train_6mer.json
+│   ├── train.csv
+│   └── train_plus_dev.csv
+├── H2AFZ
+│   ├── dev_6mer.json
+│   ├── dev.csv
+│   ├── test_6mer.json
+│   ├── test.csv
+│   ├── train_6mer.json
+│   ├── train.csv
+│   └── train_plus_dev.csv
+├── H3K27ac
+│   ├── dev_6mer.json
+│   ├── dev.csv
+│   ├── test_6mer.json
+│   ├── test.csv
+│   ├── train_6mer.json
+│   ├── train.csv
+│   └── train_plus_dev.csv
+├── H3K27me3
+│   ├── dev_6mer.json
+│   ├── dev.csv
+│   ├── test_6mer.json
+│   ├── test.csv
+│   ├── train_6mer.json
+│   ├── train.csv
+│   └── train_plus_dev.csv
+├── H3K36me3
+│   ├── dev_6mer.json
+│   ├── dev.csv
+│   ├── test_6mer.json
+│   ├── test.csv
+│   ├── train_6mer.json
+│   ├── train.csv
+│   └── train_plus_dev.csv
+├── H3K4me1
+│   ├── dev_6mer.json
+│   ├── dev.csv
+│   ├── test_6mer.json
+│   ├── test.csv
+│   ├── train_6mer.json
+│   ├── train.csv
+│   └── train_plus_dev.csv
+├── H3K4me2
+│   ├── dev_6mer.json
+│   ├── dev.csv
+│   ├── test_6mer.json
+│   ├── test.csv
+│   ├── train_6mer.json
+│   ├── train.csv
+│   └── train_plus_dev.csv
+├── H3K4me3
+│   ├── dev_6mer.json
+│   ├── dev.csv
+│   ├── test_6mer.json
+│   ├── test.csv
+│   ├── train_6mer.json
+│   ├── train.csv
+│   └── train_plus_dev.csv
+├── H3K9ac
+│   ├── dev_6mer.json
+│   ├── dev.csv
+│   ├── test_6mer.json
+│   ├── test.csv
+│   ├── train_6mer.json
+│   ├── train.csv
+│   └── train_plus_dev.csv
+├── H3K9me3
+│   ├── dev_6mer.json
+│   ├── dev.csv
+│   ├── test_6mer.json
+│   ├── test.csv
+│   ├── train_6mer.json
+│   ├── train.csv
+│   └── train_plus_dev.csv
+├── H4K20me1
+│   ├── dev_6mer.json
+│   ├── dev.csv
+│   ├── test_6mer.json
+│   ├── test.csv
+│   ├── train_6mer.json
+│   ├── train.csv
+│   └── train_plus_dev.csv
+├── promoter_all
+│   ├── dev_6mer.json
+│   ├── dev.csv
+│   ├── test_6mer.json
+│   ├── test.csv
+│   ├── train_6mer.json
+│   ├── train.csv
+│   └── train_plus_dev.csv
+├── promoter_no_tata
+│   ├── dev_6mer.json
+│   ├── dev.csv
+│   ├── test_6mer.json
+│   ├── test.csv
+│   ├── train_6mer.json
+│   ├── train.csv
+│   └── train_plus_dev.csv
+├── promoter_tata
+│   ├── dev_6mer.json
+│   ├── dev.csv
+│   ├── test_6mer.json
+│   ├── test.csv
+│   ├── train_6mer.json
+│   ├── train.csv
+│   └── train_plus_dev.csv
+├── splice_sites_acceptors
+│   ├── dev_6mer.json
+│   ├── dev.csv
+│   ├── test_6mer.json
+│   ├── test.csv
+│   ├── train_6mer.json
+│   ├── train.csv
+│   └── train_plus_dev.csv
+├── splice_sites_all
+│   ├── dev_6mer.json
+│   ├── dev.csv
+│   ├── test_6mer.json
+│   ├── test.csv
+│   ├── train_6mer.json
+│   ├── train.csv
+│   └── train_plus_dev.csv
+└── splice_sites_donors
+    ├── dev_6mer.json
+    ├── dev.csv
+    ├── test_6mer.json
+    ├── test.csv
+    ├── train_6mer.json
+    ├── train.csv
+    └── train_plus_dev.csv
+
+18 directories, 126 files
+(base) [lindseylm@biowulf NTv2]$ cd ..
+(base) [lindseylm@biowulf Finetuning_Datasets]$ cd genomic-benchmark/
+(base) [lindseylm@biowulf genomic-benchmark]$ tree
+.
+├── demo_coding_vs_intergenomic
+│   ├── dev.csv
+│   ├── test.csv
+│   └── train.csv
+├── demo_human_or_worm
+│   ├── dev.csv
+│   ├── test.csv
+│   └── train.csv
+├── drosophilia_enhancers
+│   ├── dev.csv
+│   ├── test.csv
+│   └── train.csv
+├── dummy_mouse_enhancers
+│   ├── dev.csv
+│   ├── test.csv
+│   └── train.csv
+├── human_enhancers_cohn
+│   ├── dev.csv
+│   ├── test.csv
+│   └── train.csv
+├── human_enhancers_ensembl
+│   ├── dev.csv
+│   ├── test.csv
+│   └── train.csv
+├── human_ensembl_regulatory
+│   ├── dev.csv
+│   ├── test.csv
+│   └── train.csv
+├── human_nontata_promoters
+│   ├── dev.csv
+│   ├── test.csv
+│   └── train.csv
+├── human_ocr_ensembl
+│   ├── dev.csv
+│   ├── test.csv
+│   └── train.csv
+└── README.md
