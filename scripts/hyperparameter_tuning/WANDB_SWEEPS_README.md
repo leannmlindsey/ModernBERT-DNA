@@ -19,8 +19,8 @@ The sweep system allows you to automatically search for optimal hyperparameters 
 - `wandb_sweep_dna_finetuning.yaml`: Sweep configuration defining hyperparameter search space
 - `run_wandb_sweep_dna.py`: Python script that runs a single sweep trial
 - `create_wandb_sweep.sh`: Creates a new sweep and returns the sweep ID
-- `slurm_wandb_sweep.sh`: SLURM script for running sweep agents on a cluster
 - `launch_wandb_sweep.sh`: Local script for running sweeps on a single machine
+- `../slurm/slurm_wandb_sweep.sh`: SLURM script for running sweep agents on a cluster
 
 ## Workflow
 
@@ -28,17 +28,17 @@ The sweep system allows you to automatically search for optimal hyperparameters 
 
 1. **Create the sweep:**
    ```bash
-   ./create_wandb_sweep.sh ntv2 enhancers
+   ./scripts/hyperparameter_tuning/create_wandb_sweep.sh ntv2 enhancers
    ```
    This will output a SWEEP_ID.
 
 2. **Submit SLURM array job:**
    ```bash
    # For BPE model
-   sbatch slurm_wandb_sweep.sh <SWEEP_ID> ntv2 enhancers bpe /path/to/pretrained/checkpoint.pt
+   sbatch scripts/slurm/slurm_wandb_sweep.sh <SWEEP_ID> ntv2 enhancers bpe /path/to/pretrained/checkpoint.pt
    
    # For character model
-   sbatch slurm_wandb_sweep.sh <SWEEP_ID> ntv2 enhancers char /path/to/pretrained/checkpoint.pt
+   sbatch scripts/slurm/slurm_wandb_sweep.sh <SWEEP_ID> ntv2 enhancers char /path/to/pretrained/checkpoint.pt
    ```
 
    The SLURM script will:
@@ -55,7 +55,7 @@ The sweep system allows you to automatically search for optimal hyperparameters 
 
 1. **Launch sweep with multiple agents:**
    ```bash
-   ./launch_wandb_sweep.sh ntv2 enhancers bpe /path/to/checkpoint.pt 4
+   ./scripts/hyperparameter_tuning/launch_wandb_sweep.sh ntv2 enhancers bpe /path/to/checkpoint.pt 4
    ```
    This will create a sweep and launch 4 parallel agents locally.
 
@@ -64,28 +64,28 @@ The sweep system allows you to automatically search for optimal hyperparameters 
 ### NTv2 Benchmark
 ```bash
 # Create sweep
-./create_wandb_sweep.sh ntv2 enhancers
+./scripts/hyperparameter_tuning/create_wandb_sweep.sh ntv2 enhancers
 
 # Run on SLURM (assuming sweep ID is abc123)
-sbatch slurm_wandb_sweep.sh abc123 ntv2 enhancers bpe /data/models/modernbert-base-dna.pt
+sbatch scripts/slurm/slurm_wandb_sweep.sh abc123 ntv2 enhancers bpe /data/models/modernbert-base-dna.pt
 ```
 
 ### GUE Benchmark
 ```bash
 # Create sweep
-./create_wandb_sweep.sh gue human_h3k4me3
+./scripts/hyperparameter_tuning/create_wandb_sweep.sh gue human_h3k4me3
 
 # Run on SLURM
-sbatch slurm_wandb_sweep.sh abc123 gue human_h3k4me3 bpe /data/models/modernbert-base-dna.pt
+sbatch scripts/slurm/slurm_wandb_sweep.sh abc123 gue human_h3k4me3 bpe /data/models/modernbert-base-dna.pt
 ```
 
 ### GB Benchmark
 ```bash
 # Create sweep
-./create_wandb_sweep.sh gb human_nontata_promoters
+./scripts/hyperparameter_tuning/create_wandb_sweep.sh gb human_nontata_promoters
 
 # Run on SLURM
-sbatch slurm_wandb_sweep.sh abc123 gb human_nontata_promoters char /data/models/modernbert-base-dna-char.pt
+sbatch scripts/slurm/slurm_wandb_sweep.sh abc123 gb human_nontata_promoters char /data/models/modernbert-base-dna-char.pt
 ```
 
 ## Customizing Hyperparameter Search

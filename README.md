@@ -59,20 +59,20 @@ composer -n 4 main.py \
 #### SLURM Cluster
 ```bash
 # Submit pretraining job
-sbatch slurm_pretrain.sh <config_file> <output_dir>
+sbatch scripts/slurm/slurm_pretrain.sh <config_file> <output_dir>
 
 # Example:
-sbatch slurm_pretrain.sh yamls/pretrain/modernbert-base-pretrain_modified.yaml ./outputs/pretrain_bpe
+sbatch scripts/slurm/slurm_pretrain.sh yamls/pretrain/modernbert-base-pretrain_modified.yaml ./outputs/pretrain_bpe
 ```
 
 ### Resuming Pretraining
 
 ```bash
 # Resume from checkpoint
-sbatch slurm_pretrain_resume.sh <config_file> <output_dir> <checkpoint_path>
+sbatch scripts/slurm/slurm_pretrain_resume.sh <config_file> <output_dir> <checkpoint_path>
 
 # Example:
-sbatch slurm_pretrain_resume.sh \
+sbatch scripts/slurm/slurm_pretrain_resume.sh \
     yamls/pretrain/modernbert-base-pretrain_modified.yaml \
     ./outputs/pretrain_bpe \
     ./outputs/pretrain_bpe/checkpoints/latest-rank0.pt
@@ -92,30 +92,30 @@ The Nucleotide Transformer v2 (NTv2) benchmark includes 18 tasks:
 
 ```bash
 # BPE model on enhancers task
-./run_dna_eval_single_task.sh enhancers bpe /path/to/bpe_checkpoint.pt ./outputs
+./scripts/finetuning/run_dna_eval_single_task.sh enhancers bpe /path/to/bpe_checkpoint.pt ./outputs
 
 # Character model on H3K4me3 task
-./run_dna_eval_single_task.sh H3K4me3 char /path/to/char_checkpoint.pt ./outputs
+./scripts/finetuning/run_dna_eval_single_task.sh H3K4me3 char /path/to/char_checkpoint.pt ./outputs
 ```
 
 ### Running All NTv2 Tasks
 
 ```bash
 # Run all tasks for BPE model
-./run_all_ntv2_tasks.sh
+./scripts/finetuning/run_all_ntv2_tasks.sh
 
 # Run all tasks for character model (edit script to set MODEL_TYPE=char)
-./run_all_ntv2_tasks.sh
+./scripts/finetuning/run_all_ntv2_tasks.sh
 ```
 
 ### SLURM Submission
 
 ```bash
 # Single task
-sbatch slurm_dna_eval_single.sh ntv2 enhancers bpe /path/to/checkpoint.pt ./outputs zhihan1996/DNABERT-2-117M
+sbatch scripts/slurm/slurm_dna_eval_single.sh ntv2 enhancers bpe /path/to/checkpoint.pt ./outputs zhihan1996/DNABERT-2-117M
 
 # Multiple tasks (edit TASK_LIST in script)
-sbatch slurm_dna_eval.sh ntv2 bpe /path/to/checkpoint.pt ./outputs
+sbatch scripts/slurm/slurm_dna_eval.sh ntv2 bpe /path/to/checkpoint.pt ./outputs
 ```
 
 ## Hyperparameter Optimization
@@ -125,13 +125,13 @@ We provide comprehensive hyperparameter sweep functionality using Weights & Bias
 ### Quick Start
 ```bash
 # Create sweep
-./create_wandb_sweep.sh ntv2 enhancers
+./scripts/hyperparameter_tuning/create_wandb_sweep.sh ntv2 enhancers
 
 # Submit SLURM array job (20 parallel trials)
-sbatch slurm_wandb_sweep.sh <SWEEP_ID> ntv2 enhancers bpe /path/to/checkpoint.pt
+sbatch scripts/slurm/slurm_wandb_sweep.sh <SWEEP_ID> ntv2 enhancers bpe /path/to/checkpoint.pt
 ```
 
-For detailed instructions, see [WANDB_SWEEPS_README.md](WANDB_SWEEPS_README.md).
+For detailed instructions, see [scripts/hyperparameter_tuning/WANDB_SWEEPS_README.md](scripts/hyperparameter_tuning/WANDB_SWEEPS_README.md).
 
 ## Output Structure
 
