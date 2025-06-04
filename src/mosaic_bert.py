@@ -16,14 +16,31 @@ import bert_layers as bert_layers_module
 import transformers
 from composer.metrics.nlp import BinaryF1Score, LanguageCrossEntropy, MaskedAccuracy
 from composer.models.huggingface import HuggingFaceModel
-from torchmetrics import MeanSquaredError
+from torchmetrics import MeanSquaredError, Metric
 from torchmetrics.classification.accuracy import MulticlassAccuracy, MultilabelAccuracy
 from torchmetrics.classification.matthews_corrcoef import MatthewsCorrCoef
 from torchmetrics.regression.spearman import SpearmanCorrCoef
+import torch
+from torch import Tensor
 
 import src.bert_layers.configuration_bert as configuration_bert_module
 
 all = ["create_mosaic_bert_mlm", "create_mosaic_bert_classification"]
+
+
+class Perplexity(LanguageCrossEntropy):
+    """Torchmetric that computes perplexity from cross-entropy loss"""
+
+    def compute(self) -> Tensor:
+        """Aggregate the state over all processes to compute the perplexity.
+
+        Returns:
+            perplexity: The perplexity (exp of average cross-entropy loss) as a :class:`~torch.Tensor`.
+        """
+        # First compute the average cross-entropy loss
+        avg_loss = super().compute()
+        # Perplexity = exp(average cross-entropy loss)
+        return torch.exp(avg_loss)
 
 
 def create_mosaic_bert_mlm(
@@ -123,6 +140,7 @@ def create_mosaic_bert_mlm(
         # vocab size no longer arg in composer
         LanguageCrossEntropy(ignore_index=-100),
         MaskedAccuracy(ignore_index=-100),
+        Perplexity(),
     ]
 
     hf_model = HuggingFaceModel(

@@ -14,8 +14,25 @@ from torchmetrics import MeanSquaredError
 from torchmetrics.classification.accuracy import MulticlassAccuracy, MultilabelAccuracy
 from torchmetrics.classification.matthews_corrcoef import MatthewsCorrCoef
 from torchmetrics.regression.spearman import SpearmanCorrCoef
+import torch
+from torch import Tensor
 
 __all__ = ["create_hf_bert_mlm", "create_hf_bert_classification"]
+
+
+class Perplexity(LanguageCrossEntropy):
+    """Torchmetric that computes perplexity from cross-entropy loss"""
+
+    def compute(self) -> Tensor:
+        """Aggregate the state over all processes to compute the perplexity.
+
+        Returns:
+            perplexity: The perplexity (exp of average cross-entropy loss) as a :class:`~torch.Tensor`.
+        """
+        # First compute the average cross-entropy loss
+        avg_loss = super().compute()
+        # Perplexity = exp(average cross-entropy loss)
+        return torch.exp(avg_loss)
 
 
 def create_hf_bert_mlm(
@@ -112,6 +129,7 @@ def create_hf_bert_mlm(
         # vocab_size no longer in composer
         LanguageCrossEntropy(ignore_index=-100),
         MaskedAccuracy(ignore_index=-100),
+        Perplexity(ignore_index=-100),
     ]
     return HuggingFaceModel(
         model=model, tokenizer=tokenizer, use_logits=True, metrics=metrics

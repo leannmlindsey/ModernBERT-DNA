@@ -141,6 +141,22 @@ class EfficientZLoss(Metric):
         return self.sum_loss / self.total_items  # type: ignore (third-party)
 
 
+@rename_class("Perplexity")
+class Perplexity(EfficientCrossEntropy):
+    """Torchmetric that computes perplexity from cross-entropy loss"""
+
+    def compute(self) -> Tensor:
+        """Aggregate the state over all processes to compute the perplexity.
+
+        Returns:
+            perplexity: The perplexity (exp of average cross-entropy loss) as a :class:`~torch.Tensor`.
+        """
+        # First compute the average cross-entropy loss
+        avg_loss = super().compute()
+        # Perplexity = exp(average cross-entropy loss)
+        return torch.exp(avg_loss)
+
+
 class EfficientHuggingFaceModel(HuggingFaceModel):
     def eval_forward(self, batch, outputs: Optional[Any] = None):
         outputs = self.forward(batch) if outputs is None else outputs
@@ -290,6 +306,10 @@ def create_flex_bert_mlm(
             metrics = [LanguageCrossEntropy(ignore_index=-100)] + metrics
     else:
         metrics = [EfficientCrossEntropy()] + metrics
+    
+    # Add Perplexity metric
+    metrics.append(Perplexity())
+    
     if model_config.get("loss_kwargs", {}).get("return_z_loss", False):
         metrics += [EfficientZLoss()]
 
