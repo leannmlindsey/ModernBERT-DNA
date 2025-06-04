@@ -87,7 +87,17 @@ export WORLD_SIZE=1
 echo "Running DNA evaluation for all $BENCHMARK tasks with $MODEL_TYPE tokenizer"
 
 # Convert comma-separated tasks to list format for eval_tasks parameter
-TASK_LIST="[${TASKS}]"
+# Need to quote each task name for proper YAML parsing
+IFS=',' read -ra TASK_ARRAY <<< "$TASKS"
+TASK_LIST="["
+for i in "${!TASK_ARRAY[@]}"; do
+    if [ $i -eq 0 ]; then
+        TASK_LIST="${TASK_LIST}${TASK_ARRAY[$i]}"
+    else
+        TASK_LIST="${TASK_LIST},${TASK_ARRAY[$i]}"
+    fi
+done
+TASK_LIST="${TASK_LIST}]"
 
 # Build the command
 CMD="./run_dna_eval.sh $MODEL_TYPE eval_tasks=$TASK_LIST eval_on_test=$EVAL_ON_TEST benchmark=$BENCHMARK"
