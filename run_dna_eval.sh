@@ -50,6 +50,7 @@ python dna_eval.py \
     pretrained_checkpoint=$MODEL_PATH \
     vocab_size=$VOCAB_SIZE \
     save_folder=$OUTPUT_DIR \
+    output_dir=$OUTPUT_DIR \
     $ADDITIONAL_ARGS 2>&1 | tee $OUTPUT_DIR/eval_log.txt
 
 echo "Evaluation complete. Results saved to: $OUTPUT_DIR"
