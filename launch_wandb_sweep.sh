@@ -44,8 +44,8 @@ if [ "$MODEL_TYPE" == "bpe" ]; then
     TOKENIZER_NAME="zhihan1996/DNABERT-2-117M"
     VOCAB_SIZE=4096
 elif [ "$MODEL_TYPE" == "char" ]; then
-    TOKENIZER_NAME="./char_tokenizer_4kmer"
-    VOCAB_SIZE=4101
+    TOKENIZER_NAME="./char_tokenizer"
+    VOCAB_SIZE=10
 else
     echo "Invalid model type: $MODEL_TYPE (must be bpe or char)"
     exit 1

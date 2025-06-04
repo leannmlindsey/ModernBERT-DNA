@@ -2,10 +2,18 @@
 
 This repository extends [ModernBERT](https://github.com/AnswerDotAI/ModernBERT) for DNA sequence modeling, implementing both BPE and character-level tokenization strategies.
 
+## Key Differences from Original ModernBERT
+
+1. **Tokenization**: Support for genomic-specific tokenizers (BPE and character-level)
+2. **Vocabulary Size**: 4096 for BPE, 10 for character model
+3. **RoPE Configuration**: Adapted for DNA sequences up to 10k base pairs
+4. **Task-Specific Heads**: Classification heads for genomic tasks
+5. **Metrics**: Added perplexity tracking during pretraining
+
 ## Overview
 
 This repository adapts the ModernBERT architecture for genomic sequence modeling, supporting:
-- **Two tokenization strategies**: BPE (DNABERT-2) and character-level (4-mer vocabulary)
+- **Two tokenization strategies**: BPE (DNABERT-2) and character-level
 - **Pretraining** on large-scale genomic data
 - **Finetuning** on DNA benchmark tasks (NTv2, GUE, GB)
 - **Hyperparameter optimization** using Weights & Biases sweeps
@@ -43,7 +51,7 @@ composer -n 4 main.py \
 # Single node (4 GPUs)
 composer -n 4 main.py \
     yamls/pretrain/modernbert-base-pretrain_modified_char.yaml \
-    tokenizer_name=./char_tokenizer_4kmer \
+    tokenizer_name=./char_tokenizer \
     run_name=dna-modernbert-base-char \
     save_folder=./checkpoints/char_model
 ```
@@ -146,14 +154,6 @@ outputs/
 - `yamls/dna_eval_ntv2.yaml` - NTv2 benchmark evaluation
 - `yamls/dna_eval_gue.yaml` - GUE benchmark evaluation (coming soon)
 - `yamls/dna_eval_gb.yaml` - Genomic Benchmarks evaluation (coming soon)
-
-## Key Differences from Original ModernBERT
-
-1. **Tokenization**: Support for genomic-specific tokenizers (BPE and character-level)
-2. **Vocabulary Size**: 4096 for BPE, 4101 for character model
-3. **RoPE Configuration**: Adapted for DNA sequences up to 10k base pairs
-4. **Task-Specific Heads**: Classification heads for genomic tasks
-5. **Metrics**: Added perplexity tracking during pretraining
 
 ---
 
