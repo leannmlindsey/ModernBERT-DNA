@@ -1,0 +1,73 @@
+# WandB Sweep Configuration for DNA Model Finetuning
+# This file defines hyperparameter search spaces for DNA sequence classification tasks
+
+program: run_wandb_sweep_dna.py
+method: bayes  # or random, grid
+metric:
+  name: eval/accuracy
+  goal: maximize
+
+parameters:
+  # Learning rate search
+  lr:
+    distribution: log_uniform_values
+    min: 1e-6
+    max: 1e-4
+    
+  # Weight decay search
+  weight_decay:
+    distribution: log_uniform_values
+    min: 1e-6
+    max: 1e-4
+    
+  # Batch size search (will be adjusted based on GPU memory)
+  batch_size:
+    values: [16, 32, 64]
+    
+  # Warmup proportion
+  warmup_ratio:
+    distribution: uniform
+    min: 0.0
+    max: 0.1
+    
+  # Dropout search (if applicable)
+  dropout:
+    distribution: uniform
+    min: 0.0
+    max: 0.3
+    
+  # Number of epochs
+  num_epochs:
+    values: [3, 5, 10]
+    
+  # Optimizer betas
+  beta1:
+    distribution: uniform
+    min: 0.85
+    max: 0.95
+    
+  beta2:
+    distribution: uniform
+    min: 0.95
+    max: 0.999
+    
+  # Gradient clipping
+  gradient_clip_val:
+    values: [0.0, 0.5, 1.0]
+    
+  # Scheduler type
+  scheduler_type:
+    values: ["constant_with_warmup", "cosine_with_warmup", "linear_decay_with_warmup"]
+    
+  # For cosine/linear schedules
+  scheduler_alpha_f:
+    distribution: uniform
+    min: 0.0
+    max: 0.1
+
+# Early termination settings
+early_terminate:
+  type: hyperband
+  s: 2
+  eta: 3
+  max_iter: 10
