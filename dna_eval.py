@@ -9,6 +9,7 @@ import multiprocessing as mp
 import os
 import sys
 import time
+import pandas as pd
 from collections import defaultdict
 from concurrent.futures import ProcessPoolExecutor as Pool
 from multiprocessing.managers import DictProxy, SyncManager
@@ -364,7 +365,75 @@ def main(cfg: dict):
         if accuracy is not None:
             print(f"{job_name}: {accuracy:.4f}")
     
+    # Save metrics to CSV
+    save_metrics_to_csv(metrics, cfg)
+    
     return metrics
+
+
+def save_metrics_to_csv(metrics: Dict[str, Any], cfg: dict):
+    """Save evaluation metrics to CSV files - one per task.
+    
+    Args:
+        metrics: Dictionary containing metrics for each job/task
+        cfg: Configuration dictionary
+    """
+    # Generate timestamp once for all files
+    import datetime
+    timestamp = datetime.datetime.now().strftime("%Y%m%d_%H%M%S")
+    
+    # Get output directory
+    output_dir = cfg.get('output_dir', '.')
+    os.makedirs(output_dir, exist_ok=True)
+    
+    # Get model and tokenizer info
+    model_name = cfg.get('model', {}).get('name', 'unknown')
+    tokenizer_name = cfg.get('tokenizer_name', 'unknown').replace('/', '_')
+    
+    # Determine benchmark from config or tasks
+    benchmark = cfg.get('benchmark', None)
+    if benchmark is None:
+        # Infer benchmark from task names
+        task_names = list(metrics.keys())
+        if any(task in NTV2_TASKS for task in task_names):
+            benchmark = 'ntv2'
+        # TODO: Add logic for GUE and GB when implemented
+        else:
+            benchmark = 'unknown'
+    
+    # Save each task's metrics to its own CSV file
+    for task_name, task_metrics in metrics.items():
+        # Prepare data for this task
+        row = {'task': task_name}
+        
+        if isinstance(task_metrics, dict):
+            # Flatten nested metrics
+            for metric_name, metric_value in task_metrics.items():
+                if isinstance(metric_value, dict):
+                    # Handle nested metric dictionaries (e.g., eval/accuracy)
+                    for sub_metric_name, sub_metric_value in metric_value.items():
+                        if isinstance(sub_metric_value, torch.Tensor):
+                            sub_metric_value = sub_metric_value.item()
+                        if isinstance(sub_metric_value, (int, float)):
+                            row[f"{metric_name}/{sub_metric_name}"] = sub_metric_value
+                else:
+                    if isinstance(metric_value, torch.Tensor):
+                        metric_value = metric_value.item()
+                    if isinstance(metric_value, (int, float)):
+                        row[metric_name] = metric_value
+        
+        # Create DataFrame for this task
+        df = pd.DataFrame([row])
+        
+        # Generate filename for this task
+        csv_filename = os.path.join(
+            output_dir, 
+            f"{model_name}_{tokenizer_name}_{benchmark}_{task_name}_{timestamp}.csv"
+        )
+        
+        # Save to CSV
+        df.to_csv(csv_filename, index=False)
+        print(f"Metrics for {task_name} saved to: {csv_filename}")
 
 
 if __name__ == "__main__":
