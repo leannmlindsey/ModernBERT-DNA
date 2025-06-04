@@ -18,6 +18,7 @@ MODEL_TYPE=${2:-bpe}  # Default to BPE
 EVAL_ON_TEST=${3:-true}  # Default to evaluating on test set
 CUSTOM_TOKENIZER=$4  # Optional custom tokenizer
 OUTPUT_PARENT_DIR=$5  # Optional output parent directory
+SCRIPT_DIR="/data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/scripts/finetuning"
 
 if [ -z "$BENCHMARK" ]; then
     echo "Error: Missing required benchmark name"
@@ -100,7 +101,7 @@ done
 TASK_LIST="${TASK_LIST}]"
 
 # Build the command
-CMD="./run_dna_eval.sh $MODEL_TYPE eval_tasks=$TASK_LIST eval_on_test=$EVAL_ON_TEST benchmark=$BENCHMARK"
+CMD="$SCRIPT_DIR/run_dna_eval.sh $MODEL_TYPE eval_tasks=$TASK_LIST eval_on_test=$EVAL_ON_TEST benchmark=$BENCHMARK"
 
 if [ ! -z "$CUSTOM_TOKENIZER" ]; then
     CMD="$CMD tokenizer_name=$CUSTOM_TOKENIZER"
