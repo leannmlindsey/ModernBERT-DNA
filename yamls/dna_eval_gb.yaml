@@ -1,0 +1,115 @@
+# Configuration for evaluating pretrained DNA models on Genomic Benchmarks (GB)
+
+# Dataset configuration
+dataset_base_path: /data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/Finetuning_Datasets
+
+# Which tasks to evaluate (comment out to run all)
+# eval_tasks:
+#   - human_nontata_promoters
+#   - human_ocr_ensembl
+#   - human_enhancers_ensembl
+#   - dummy_mouse_enhancers
+#   - drosophilia_enhancers
+#   - human_enhancers_cohn
+#   - human_ensembl_regulatory
+#   - demo_human_or_worm
+#   - demo_coding_vs_intergenomic
+
+# Model configuration (will be overridden by command line)
+model:
+  name: flex_bert
+  pretrained_model_name: bert-base-uncased
+  tokenizer_name: ${tokenizer_name}
+  pretrained_checkpoint: ${pretrained_checkpoint}
+  model_config:
+    # Architecture settings to match pretrained model
+    num_hidden_layers: 12
+    hidden_size: 768
+    num_attention_heads: 12
+    intermediate_size: 3072
+    # RoPE configuration - no absolute position embeddings
+    attention_layer: rope
+    embedding_layer: sans_pos
+    rotary_emb_dim: null
+    rotary_emb_base: 10000.0
+    rotary_emb_scale_base: null
+    rotary_emb_interleaved: false
+    # Other settings
+    normalization: rmsnorm
+    bert_layer: prenorm
+    final_norm: true
+    skip_first_prenorm: true
+    deterministic_fa2: false
+    hidden_act: gelu
+    use_fa2: true
+    sliding_window: 128
+    global_attn_every_n_layers: 3
+    use_sdpa_attn_mask: false
+    tie_word_embeddings: false
+    vocab_size: ${vocab_size}
+    allow_embedding_resizing: true
+    unpad_embeddings: true
+    padding: unpadded
+
+# Training configuration
+seed: 42
+precision: amp_fp16
+default_batch_size: 64
+max_duration: 10ep
+eval_interval: 1ep
+skip_training: false  # Set to true for zero-shot evaluation
+eval_on_test: false  # Set to true to evaluate on test set with all metrics
+
+# Scheduler configuration
+scheduler:
+  name: constant_with_warmup
+  t_warmup: 0.06dur
+
+# Callbacks
+callbacks:
+  lr_monitor: {}
+  speed_monitor:
+    window_size: 50
+
+# Job-specific configurations (matching the finetuning config)
+jobs:
+  # Promoter prediction tasks
+  human_nontata_promoters:
+    batch_size: 64
+    max_sequence_length: 512
+    
+  # Regulatory element prediction
+  human_ocr_ensembl:
+    batch_size: 64
+    max_sequence_length: 512
+    
+  # Enhancer prediction tasks
+  human_enhancers_ensembl:
+    batch_size: 64
+    max_sequence_length: 512
+    
+  dummy_mouse_enhancers:
+    batch_size: 64
+    max_sequence_length: 512
+    
+  drosophilia_enhancers:
+    batch_size: 64
+    max_sequence_length: 512
+    
+  human_enhancers_cohn:
+    batch_size: 64
+    max_sequence_length: 512
+    
+  # Regulatory element classification
+  human_ensembl_regulatory:
+    batch_size: 64
+    max_sequence_length: 512
+    
+  # Demo/test tasks
+  demo_human_or_worm:
+    batch_size: 64
+    max_sequence_length: 512
+    
+  demo_coding_vs_intergenomic:
+    batch_size: 64
+    max_sequence_length: 512

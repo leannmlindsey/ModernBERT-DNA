@@ -1,0 +1,211 @@
+# Configuration for evaluating pretrained DNA models on GUE benchmarks
+
+# Dataset configuration
+dataset_base_path: /data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/Finetuning_Datasets
+
+# Which tasks to evaluate (comment out to run all)
+# eval_tasks:
+#   - human_h3
+#   - human_h3k14ac
+#   - human_h3k36me3
+#   - human_h3k4me1
+#   - human_h3k4me2
+#   - human_h3k4me3
+#   - human_h3k79me3
+#   - human_h3k9ac
+#   - human_h4
+#   - human_h4ac
+#   - mouse_0
+#   - mouse_1
+#   - mouse_2
+#   - mouse_3
+#   - mouse_4
+#   - prom_300_all
+#   - prom_300_notata
+#   - prom_300_tata
+#   - prom_core_all
+#   - prom_core_notata
+#   - prom_core_tata
+#   - splice_reconstructed
+#   - tf_0
+#   - tf_1
+#   - tf_2
+#   - tf_3
+#   - tf_4
+#   - virus_covid
+
+# Model configuration (will be overridden by command line)
+model:
+  name: flex_bert
+  pretrained_model_name: bert-base-uncased
+  tokenizer_name: ${tokenizer_name}
+  pretrained_checkpoint: ${pretrained_checkpoint}
+  model_config:
+    # Architecture settings to match pretrained model
+    num_hidden_layers: 12
+    hidden_size: 768
+    num_attention_heads: 12
+    intermediate_size: 3072
+    # RoPE configuration - no absolute position embeddings
+    attention_layer: rope
+    embedding_layer: sans_pos
+    rotary_emb_dim: null
+    rotary_emb_base: 10000.0
+    rotary_emb_scale_base: null
+    rotary_emb_interleaved: false
+    # Other settings
+    normalization: rmsnorm
+    bert_layer: prenorm
+    final_norm: true
+    skip_first_prenorm: true
+    deterministic_fa2: false
+    hidden_act: gelu
+    use_fa2: true
+    sliding_window: 128
+    global_attn_every_n_layers: 3
+    use_sdpa_attn_mask: false
+    tie_word_embeddings: false
+    vocab_size: ${vocab_size}
+    allow_embedding_resizing: true
+    unpad_embeddings: true
+    padding: unpadded
+
+# Training configuration
+seed: 42
+precision: amp_fp16
+default_batch_size: 32
+max_duration: 10ep
+eval_interval: 1ep
+skip_training: false  # Set to true for zero-shot evaluation
+eval_on_test: false  # Set to true to evaluate on test set with all metrics
+
+# Scheduler configuration
+scheduler:
+  name: constant_with_warmup
+  t_warmup: 0.06dur
+
+# Callbacks
+callbacks:
+  lr_monitor: {}
+  speed_monitor:
+    window_size: 50
+
+# Job-specific configurations (matching the finetuning config)
+jobs:
+  # EMP tasks (Epigenetic Marks Prediction) - 2388bp sequences
+  human_h3:
+    batch_size: 16
+    max_sequence_length: 2388
+    
+  human_h3k14ac:
+    batch_size: 16
+    max_sequence_length: 2388
+    
+  human_h3k36me3:
+    batch_size: 16
+    max_sequence_length: 2388
+    
+  human_h3k4me1:
+    batch_size: 16
+    max_sequence_length: 2388
+    
+  human_h3k4me2:
+    batch_size: 16
+    max_sequence_length: 2388
+    
+  human_h3k4me3:
+    batch_size: 16
+    max_sequence_length: 2388
+    
+  human_h3k79me3:
+    batch_size: 16
+    max_sequence_length: 2388
+    
+  human_h3k9ac:
+    batch_size: 16
+    max_sequence_length: 2388
+    
+  human_h4:
+    batch_size: 16
+    max_sequence_length: 2388
+    
+  human_h4ac:
+    batch_size: 16
+    max_sequence_length: 2388
+  
+  # Mouse enhancer tasks - 3231bp sequences
+  mouse_0:
+    batch_size: 8
+    max_sequence_length: 3231
+    
+  mouse_1:
+    batch_size: 8
+    max_sequence_length: 3231
+    
+  mouse_2:
+    batch_size: 8
+    max_sequence_length: 3231
+    
+  mouse_3:
+    batch_size: 8
+    max_sequence_length: 3231
+    
+  mouse_4:
+    batch_size: 8
+    max_sequence_length: 3231
+  
+  # Promoter tasks - varying lengths
+  prom_300_all:
+    batch_size: 64
+    max_sequence_length: 300
+    
+  prom_300_notata:
+    batch_size: 64
+    max_sequence_length: 300
+    
+  prom_300_tata:
+    batch_size: 64
+    max_sequence_length: 300
+    
+  prom_core_all:
+    batch_size: 128
+    max_sequence_length: 70
+    
+  prom_core_notata:
+    batch_size: 128
+    max_sequence_length: 70
+    
+  prom_core_tata:
+    batch_size: 128
+    max_sequence_length: 70
+  
+  # Splice site task - 398bp sequences
+  splice_reconstructed:
+    batch_size: 64
+    max_sequence_length: 398
+  
+  # TF binding tasks - 101bp sequences
+  tf_0:
+    batch_size: 128
+    max_sequence_length: 101
+    
+  tf_1:
+    batch_size: 128
+    max_sequence_length: 101
+    
+  tf_2:
+    batch_size: 128
+    max_sequence_length: 101
+    
+  tf_3:
+    batch_size: 128
+    max_sequence_length: 101
+    
+  tf_4:
+    batch_size: 128
+    max_sequence_length: 101
+  
+  # Virus task - 10269bp sequences
+  virus_covid:
+    batch_size: 2  # Very long sequences
+    max_sequence_length: 10269

@@ -31,7 +31,23 @@ model:
   tokenizer_name: ${tokenizer_name}
   pretrained_checkpoint: ${pretrained_checkpoint}
   model_config:
-    normalization: layernorm
+    # Architecture settings to match pretrained model
+    num_hidden_layers: 12
+    hidden_size: 768
+    num_attention_heads: 12
+    intermediate_size: 3072
+    # RoPE configuration - no absolute position embeddings
+    attention_layer: rope
+    embedding_layer: sans_pos
+    rotary_emb_dim: null
+    rotary_emb_base: 10000.0
+    rotary_emb_scale_base: null
+    rotary_emb_interleaved: false
+    # Other settings
+    normalization: rmsnorm
+    bert_layer: prenorm
+    final_norm: true
+    skip_first_prenorm: true
     deterministic_fa2: false
     hidden_act: gelu
     use_fa2: true
@@ -40,6 +56,9 @@ model:
     use_sdpa_attn_mask: false
     tie_word_embeddings: false
     vocab_size: ${vocab_size}
+    allow_embedding_resizing: true
+    unpad_embeddings: true
+    padding: unpadded
 
 # Training configuration
 seed: 42
