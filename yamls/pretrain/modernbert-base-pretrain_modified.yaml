@@ -148,6 +148,6 @@ loggers:
 # Checkpoint to local filesystem or remote object store
 save_interval: 2000ba
 save_num_checkpoints_to_keep: 2  # Important, this cleans up checkpoints saved to DISK
-save_folder: ./dnamodernbertbase/checkpoints/{run_name}
+save_folder: ./dnamodernbertbase/checkpoints/${run_name}
 # Load from local filesystem or remote object store to
 # load_path: null

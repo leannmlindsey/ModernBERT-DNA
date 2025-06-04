@@ -20,11 +20,6 @@ if [ "$MODEL_TYPE" != "bpe" ] && [ "$MODEL_TYPE" != "char" ]; then
     exit 1
 fi
 
-# Load necessary modules
-module load python/3.9
-module load cuda/11.8  # Adjust based on your CUDA requirements
-module load gcc/11.3.0
-
 # Activate conda environment
 conda activate bert24_2
 
