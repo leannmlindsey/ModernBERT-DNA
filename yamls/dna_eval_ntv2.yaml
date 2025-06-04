@@ -71,16 +71,38 @@ eval_on_test: false  # Set to true to evaluate on test set with all metrics
 # Note: The pretrained checkpoint contains only the base model weights (MLM).
 # The classification head will be randomly initialized for fine-tuning.
 
+# Default optimizer configuration (can be overridden per task)
+default_lr: 2.0e-05
+default_weight_decay: 1.0e-05
+default_betas: [0.9, 0.98]
+default_eps: 1.0e-06
+
 # Scheduler configuration
 scheduler:
   name: constant_with_warmup
   t_warmup: 0.06dur
+  
+# Algorithm configuration (optional)
+algorithms:
+  gradient_clipping:
+    clipping_threshold: 1.0
+    clipping_type: norm
 
 # Callbacks
 callbacks:
   lr_monitor: {}
   speed_monitor:
     window_size: 50
+  
+# Loggers configuration (can be overridden by command line)
+loggers:
+  wandb:
+    project: "modernBERT-DNA-finetuning"
+    entity: "leannmlindsey"
+    tags:
+      - ntv2
+      - finetuning
+    log_dir: ${output_dir}/wandb
 
 # Job-specific configurations
 jobs:
@@ -88,6 +110,10 @@ jobs:
   H2AFZ:
     batch_size: 32
     max_sequence_length: 600
+    lr: ${default_lr}
+    weight_decay: ${default_weight_decay}
+    betas: ${default_betas}
+    eps: ${default_eps}
     
   H3K27ac:
     batch_size: 32

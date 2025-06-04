@@ -1,103 +1,172 @@
-# Welcome!
+# ModernBERT-DNA: Adapting ModernBERT for Genomic Sequence Modeling
 
-This is the repository where you can find ModernBERT, our experiments to bring BERT into modernity via both architecture changes and scaling.
+This repository extends [ModernBERT](https://github.com/AnswerDotAI/ModernBERT) for DNA sequence modeling, implementing both BPE and character-level tokenization strategies.
 
-This repository noticeably introduces FlexBERT, our modular approach to encoder building blocks, and heavily relies on .yaml configuration files to build models. The codebase builds upon [MosaicBERT](https://github.com/mosaicml/examples/tree/main/examples/benchmarks/bert), and specifically the [unmerged fork bringing Flash Attention 2](https://github.com/Skylion007/mosaicml-examples/tree/skylion007/add-fa2-to-bert) to it, under the terms of its Apache 2.0 license. We extend our thanks to MosaicML for starting the work on modernising encoders!
+**If you use any work from this repository, please cite:**
 
-This README is very barebones and is still under construction. It will improve with more reproducibility and documentation in the new year, as we gear up for more encoder niceties after the pre-holidays release of ModernBERT. For now, we're mostly looking forward to seeing what people build with the [🤗 model checkpoints](https://huggingface.co/collections/answerdotai/modernbert-67627ad707a4acbf33c41deb)).
+```bibtex
+@article{lindsey2024comparison,
+  title={A Comparison of Tokenization Impact in Attention Based and State Space Genomic Language Models},
+  author={Lindsey, LeAnn M. and Pershing, Nicole L. and Habib, Anisa and Stephens, W. Zac and Blaschke, Anne J. and Sundar, Hari},
+  journal={bioRxiv},
+  year={2024},
+  doi={10.1101/2024.09.09.612081}
+}
+```
 
-For more details on what this repository brings, we recommend reading our [release blog post](https://huggingface.co/blog/modernbert) for a high-level overview, and our [arXiv preprint](https://arxiv.org/abs/2412.13663) for more technical details.
+## Overview
 
-All code used in this repository is the code used as part of our experiments for both pre-training and GLUE evaluations, there's no uncommitted secret training sauce.
-
-**This is the research repository for ModernBERT, focused on pre-training and evaluations. If you're seeking the HuggingFace version, designed to integrate with any common pipeline, please head to the [ModernBERT Collection on HuggingFace](https://huggingface.co/collections/answerdotai/modernbert-67627ad707a4acbf33c41deb)**
-
-*ModernBERT is a collaboration between [Answer.AI](https://answer.ai), [LightOn](https://lighton.ai), and friends.*
+This repository adapts the ModernBERT architecture for genomic sequence modeling, supporting:
+- **Two tokenization strategies**: BPE (DNABERT-2) and character-level (4-mer vocabulary)
+- **Pretraining** on large-scale genomic data
+- **Finetuning** on DNA benchmark tasks (NTv2, GUE, GB)
+- **Hyperparameter optimization** using Weights & Biases sweeps
 
 ## Setup
 
-We have fully documented the environment used to train ModernBERT, which can be installed on a GPU-equipped machine with the following commands:
+```bash
+# Create conda environment
+conda env create -f environment.yaml
+conda activate bert24
+
+# Install flash attention 2
+pip install "flash_attn==2.6.3" --no-build-isolation
+
+# For DNA-specific dependencies
+pip install biopython
+```
+
+## DNA Model Pretraining
+
+### Starting New Pretraining
+
+#### BPE Model
+```bash
+# Single node (4 GPUs)
+composer -n 4 main.py \
+    yamls/pretrain/modernbert-base-pretrain_modified.yaml \
+    tokenizer_name=zhihan1996/DNABERT-2-117M \
+    run_name=dna-modernbert-base-bpe \
+    save_folder=./checkpoints/bpe_model
+```
+
+#### Character Model
+```bash
+# Single node (4 GPUs)
+composer -n 4 main.py \
+    yamls/pretrain/modernbert-base-pretrain_modified_char.yaml \
+    tokenizer_name=./char_tokenizer_4kmer \
+    run_name=dna-modernbert-base-char \
+    save_folder=./checkpoints/char_model
+```
+
+#### SLURM Cluster
+```bash
+# Submit pretraining job
+sbatch slurm_pretrain.sh <config_file> <output_dir>
+
+# Example:
+sbatch slurm_pretrain.sh yamls/pretrain/modernbert-base-pretrain_modified.yaml ./outputs/pretrain_bpe
+```
+
+### Resuming Pretraining
 
 ```bash
-conda env create -f environment.yaml
-# if the conda environment errors out set channel priority to flexible:
-# conda config --set channel_priority flexible
-conda activate bert24
-# if using H100s clone and build flash attention 3
-# git clone https://github.com/Dao-AILab/flash-attention.git
-# cd flash-attention/hopper
-# python setup.py install
-# install flash attention 2 (model uses FA3+FA2 or just FA2 if FA3 isn't supported)
-pip install "flash_attn==2.6.3" --no-build-isolation
-# or download a precompiled wheel from https://github.com/Dao-AILab/flash-attention/releases/tag/v2.6.3
-# or limit the number of parallel compilation jobs
-# MAX_JOBS=8 pip install "flash_attn==2.6.3" --no-build-isolation
+# Resume from checkpoint
+sbatch slurm_pretrain_resume.sh <config_file> <output_dir> <checkpoint_path>
+
+# Example:
+sbatch slurm_pretrain_resume.sh \
+    yamls/pretrain/modernbert-base-pretrain_modified.yaml \
+    ./outputs/pretrain_bpe \
+    ./outputs/pretrain_bpe/checkpoints/latest-rank0.pt
 ```
 
-## Training
+## DNA Model Finetuning
 
-Training heavily leverages the [composer](https://github.com/mosaicml/composer) framework. All training are configured via YAML files, of which you can find examples in the `yamls` folder. We highly encourage you to check out one of the example yamls, such as `yamls/main/flex-bert-rope-base.yaml`, to explore the configuration options.
+### NTv2 Benchmark Tasks
 
-### Launch command example
-To run a training job using `yamls/main/modernbert-base.yaml` on all available GPUs, use the following command.
-```
-composer main.py yamls/main/modernbert-base.yaml
-```
+The Nucleotide Transformer v2 (NTv2) benchmark includes 18 tasks:
+- **Histone modifications** (10 tasks): H3K4me3, H3K27ac, etc. (600bp sequences)
+- **Enhancers** (2 tasks): Binary and type classification (200bp sequences)
+- **Promoters** (3 tasks): All, TATA, and non-TATA (300bp sequences)
+- **Splice sites** (3 tasks): Acceptors, donors, and all (400bp sequences)
 
-### Data
+### Running Single Task Finetuning
 
-There are two dataset classes to choose between:
+```bash
+# BPE model on enhancers task
+./run_dna_eval_single_task.sh enhancers bpe /path/to/bpe_checkpoint.pt ./outputs
 
-`StreamingTextDataset`
-* inherits from [StreamingDataset](https://docs.mosaicml.com/projects/streaming/en/latest/preparing_datasets/dataset_format.html)
-* uses MDS, CSV/TSV or JSONL format
-* Supports both text and tokenized data
-* can be used with local data as well
-* WARNING: we found distribution of memory over accelerators to be uneven
-
-`NoStreamingDataset`
-* requires decompressed MDS-format, compressed MDS-data can be decompressed using [src/data/mds_conversion.py](src/data/mds_conversion.py)  with the `--decompress` flag.
-* Supports both text and tokenized data
-
-When data is being accessed from local, we recommend using `NoStreamingDataset` as it enabled higher training throughput in our setting. Both classes are located in [src/text_data.py](src/text_data.py), and the class to be used for a dataset can be set for each data_loader and dataset by setting streaming: true (StreamingTextDataset) or false (NoStreamingDataset).
-
-```
-train_loader:
-  name: text
-  dataset:
-    streaming: false
+# Character model on H3K4me3 task
+./run_dna_eval_single_task.sh H3K4me3 char /path/to/char_checkpoint.pt ./outputs
 ```
 
-To get started, you can experiment with c4 data using the [following instructions](https://github.com/mosaicml/examples/tree/main/examples/benchmarks/bert#prepare-your-data).
+### Running All NTv2 Tasks
 
+```bash
+# Run all tasks for BPE model
+./run_all_ntv2_tasks.sh
 
-## Evaluations
-
-### GLUE
-
-GLUE evaluations for a ModernBERT model trained with this repository can be ran with via `run_evals.py`, by providing it with a checkpoint and a training config. To evaluate non-ModernBERT models, you should use `glue.py` in conjunction with a slightly different training YAML, of which you can find examples in the `yamls/finetuning` folder.
-
-### Retrieval
-
-The `examples` subfolder contains scripts for training retrieval models, both dense models based on [Sentence Transformers](https://github.com/UKPLab/sentence-transformers) and ColBERT models via the [PyLate](https://github.com/lightonai/pylate) library:
-- `examples/train_pylate.py`: The boilerplate code to train a ModernBERT-based ColBERT model with PyLate.
-- `examples/train_st.py`: The boilerplate code to train a ModernBERT-based dense retrieval model with Sentence Transformers.
-- `examples/evaluate_pylate.py`: The boilerplate code to evaluate a ModernBERT-based ColBERT model with PyLate.
-- `examples/evaluate_st.py`: The boilerplate code to evaluate a ModernBERT-based dense retrieval model with Sentence Transformers.
-
-
-## Reference
-
-If you use ModernBERT in your work, be it the released models, the intermediate checkpoints (release pending) or this training repository, please cite:
-
-```bibtex
-@misc{modernbert,
-      title={Smarter, Better, Faster, Longer: A Modern Bidirectional Encoder for Fast, Memory Efficient, and Long Context Finetuning and Inference}, 
-      author={Benjamin Warner and Antoine Chaffin and Benjamin Clavié and Orion Weller and Oskar Hallström and Said Taghadouini and Alexis Gallagher and Raja Biswas and Faisal Ladhak and Tom Aarsen and Nathan Cooper and Griffin Adams and Jeremy Howard and Iacopo Poli},
-      year={2024},
-      eprint={2412.13663},
-      archivePrefix={arXiv},
-      primaryClass={cs.CL},
-      url={https://arxiv.org/abs/2412.13663}, 
-}
+# Run all tasks for character model (edit script to set MODEL_TYPE=char)
+./run_all_ntv2_tasks.sh
 ```
+
+### SLURM Submission
+
+```bash
+# Single task
+sbatch slurm_dna_eval_single.sh ntv2 enhancers bpe /path/to/checkpoint.pt ./outputs zhihan1996/DNABERT-2-117M
+
+# Multiple tasks (edit TASK_LIST in script)
+sbatch slurm_dna_eval.sh ntv2 bpe /path/to/checkpoint.pt ./outputs
+```
+
+## Hyperparameter Optimization
+
+We provide comprehensive hyperparameter sweep functionality using Weights & Biases.
+
+### Quick Start
+```bash
+# Create sweep
+./create_wandb_sweep.sh ntv2 enhancers
+
+# Submit SLURM array job (20 parallel trials)
+sbatch slurm_wandb_sweep.sh <SWEEP_ID> ntv2 enhancers bpe /path/to/checkpoint.pt
+```
+
+For detailed instructions, see [WANDB_SWEEPS_README.md](WANDB_SWEEPS_README.md).
+
+## Output Structure
+
+### Finetuning Outputs
+```
+outputs/
+└── ntv2_bpe_enhancers_20241206_143022/
+    ├── eval_log.txt
+    ├── flex_bert_zhihan1996_DNABERT-2-117M_ntv2_enhancers_20241206_143025.csv
+    └── wandb/
+```
+
+## Configuration Files
+
+### Pretraining Configs
+- `yamls/pretrain/modernbert-base-pretrain_modified.yaml` - BPE model pretraining
+- `yamls/pretrain/modernbert-base-pretrain_modified_char.yaml` - Character model pretraining
+
+### Evaluation Configs
+- `yamls/dna_eval_ntv2.yaml` - NTv2 benchmark evaluation
+- `yamls/dna_eval_gue.yaml` - GUE benchmark evaluation (coming soon)
+- `yamls/dna_eval_gb.yaml` - Genomic Benchmarks evaluation (coming soon)
+
+## Key Differences from Original ModernBERT
+
+1. **Tokenization**: Support for genomic-specific tokenizers (BPE and character-level)
+2. **Vocabulary Size**: 4096 for BPE, 4101 for character model
+3. **RoPE Configuration**: Adapted for DNA sequences up to 10k base pairs
+4. **Task-Specific Heads**: Classification heads for genomic tasks
+5. **Metrics**: Added perplexity tracking during pretraining
+
+---
+
+For information about the original ModernBERT architecture and implementation, please refer to the [original ModernBERT repository](https://github.com/AnswerDotAI/ModernBERT).
