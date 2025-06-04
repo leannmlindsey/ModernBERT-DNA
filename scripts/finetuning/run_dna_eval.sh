@@ -12,6 +12,8 @@ set -e  # Exit on error
 MODEL_TYPE=${1:-bpe}  # Default to BPE tokenization
 shift 1
 
+SCRIPT_DIR="/data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT"
+
 # Parse remaining arguments and look for output_parent_dir
 ADDITIONAL_ARGS=""
 OUTPUT_PARENT_DIR=""
@@ -29,7 +31,7 @@ if [ -z "$OUTPUT_PARENT_DIR" ]; then
 fi
 
 # Configuration file
-CONFIG_FILE="yamls/dna_eval_ntv2.yaml"
+CONFIG_FILE="/data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/yamls/dna_eval_ntv2.yaml"
 
 # Select model path and tokenizer based on model type
 if [ "$MODEL_TYPE" == "char" ]; then
@@ -60,7 +62,7 @@ echo "Output directory: $OUTPUT_DIR"
 echo "Additional arguments: $ADDITIONAL_ARGS"
 
 # Run evaluation
-python dna_eval.py \
+python $SCRIPT_DIR/dna_eval.py \
     $CONFIG_FILE \
     tokenizer_name=$TOKENIZER \
     pretrained_checkpoint=$MODEL_PATH \
