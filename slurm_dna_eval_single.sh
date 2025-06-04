@@ -6,16 +6,18 @@
 #SBATCH -o /data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/logs/dna_eval_%j.outerror  # Log file
 
 # SLURM script for running single DNA evaluation task
-# Usage: sbatch slurm_dna_eval_single.sh <task_name> <model_type> [eval_on_test] [tokenizer]
+# Usage: sbatch slurm_dna_eval_single.sh <task_name> <model_type> [eval_on_test] [tokenizer] [output_parent_dir]
 # Example: sbatch slurm_dna_eval_single.sh enhancers bpe true
 # Example: sbatch slurm_dna_eval_single.sh H3K27ac char false
 # Example: sbatch slurm_dna_eval_single.sh enhancers bpe true InstaDeepAI/nucleotide-transformer-v2-100m-multi-species
+# Example: sbatch slurm_dna_eval_single.sh enhancers bpe true "" /my/custom/output/path
 
 # Parse command line arguments
 TASK_NAME=$1
 MODEL_TYPE=${2:-bpe}  # Default to BPE
 EVAL_ON_TEST=${3:-true}  # Default to evaluating on test set
 CUSTOM_TOKENIZER=$4  # Optional custom tokenizer
+OUTPUT_PARENT_DIR=$5  # Optional output parent directory
 
 if [ -z "$TASK_NAME" ]; then
     echo "Error: Missing required task name"
@@ -49,6 +51,9 @@ echo "Evaluate on test: $EVAL_ON_TEST"
 if [ ! -z "$CUSTOM_TOKENIZER" ]; then
     echo "Custom Tokenizer: $CUSTOM_TOKENIZER"
 fi
+if [ ! -z "$OUTPUT_PARENT_DIR" ]; then
+    echo "Output Parent Directory: $OUTPUT_PARENT_DIR"
+fi
 echo "Start time: $(date)"
 echo "=========================================="
 
@@ -60,13 +65,20 @@ export WORLD_SIZE=1
 
 # Run DNA evaluation
 echo "Running DNA evaluation for $TASK_NAME task with $MODEL_TYPE tokenizer"
+
+# Build the command
+CMD="./run_dna_eval_single_task.sh $TASK_NAME $MODEL_TYPE eval_on_test=$EVAL_ON_TEST"
+
 if [ ! -z "$CUSTOM_TOKENIZER" ]; then
-    # If custom tokenizer is provided, override the default
-    ./run_dna_eval.sh $MODEL_TYPE eval_tasks=[$TASK_NAME] eval_on_test=$EVAL_ON_TEST tokenizer_name=$CUSTOM_TOKENIZER
-else
-    # Use default tokenizer based on model type
-    ./run_dna_eval.sh $MODEL_TYPE eval_tasks=[$TASK_NAME] eval_on_test=$EVAL_ON_TEST
+    CMD="$CMD tokenizer_name=$CUSTOM_TOKENIZER"
 fi
+
+if [ ! -z "$OUTPUT_PARENT_DIR" ]; then
+    CMD="$CMD output_parent_dir=$OUTPUT_PARENT_DIR"
+fi
+
+# Execute the command
+$CMD
 
 # Check exit status
 if [ $? -eq 0 ]; then
