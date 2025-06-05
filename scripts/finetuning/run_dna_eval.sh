@@ -38,7 +38,7 @@ if [ "$MODEL_TYPE" == "char" ]; then
     TOKENIZER="dna_char"
     MODEL_PATH="/data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/dnamodernbertbase/checkpoints/dna-char-modernbert-basemod-pretrain-4gpu/ep0-ba70000-rank0.pt"
     VOCAB_SIZE=10
-    echo "Using character-level tokenization"
+    echo "Using CHAR tokenization"
 else
     TOKENIZER="zhihan1996/DNABERT-2-117M"
     MODEL_PATH="/data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/dnamodernbertbase/checkpoints/dna-modernbert-basemod-pretrain-4gpu/ep2-ba52000-rank0.pt"

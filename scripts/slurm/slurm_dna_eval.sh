@@ -19,11 +19,10 @@ EVAL_ON_TEST=${3:-true}  # Default to evaluating on test set
 CUSTOM_TOKENIZER=$4  # Optional custom tokenizer
 OUTPUT_PARENT_DIR=$5  # Optional output parent directory
 SCRIPT_DIR="/data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT/ModernBERT/scripts/finetuning"
-export WANDB_API_KEY="4231f30cf28322633fb26bdd3b9992cd0a9ce62d”
 
 if [ -z "$BENCHMARK" ]; then
     echo "Error: Missing required benchmark name"
-    echo "Usage: sbatch slurm_dna_eval.sh <benchmark> <model_type> [eval_on_test] [tokenizer]"
+    echo "Usage: sbatch slurm_dna_eval.sh <benchmark> <model_type> [eval_on_test] [tokenizer] [output_dir] [wandb_key]"
     echo "Benchmarks: ntv2, gue (not implemented yet), gb (not implemented yet)"
     echo "Model types: bpe, char"
     exit 1
@@ -48,11 +47,6 @@ case $BENCHMARK in
         exit 1
         ;;
 esac
-
-# Load necessary modules
-#module load python/3.9
-#module load cuda/11.8  # Adjust based on your CUDA requirements
-#module load gcc/11.3.0
 
 # Activate conda environment
 source activate bert24_2
@@ -103,7 +97,7 @@ TASK_LIST="${TASK_LIST}]"
 
 # Build the command
 CMD="$SCRIPT_DIR/run_dna_eval.sh $MODEL_TYPE eval_tasks=$TASK_LIST eval_on_test=$EVAL_ON_TEST benchmark=$BENCHMARK"
-
+#echo $CMD
 if [ ! -z "$CUSTOM_TOKENIZER" ]; then
     CMD="$CMD tokenizer_name=$CUSTOM_TOKENIZER"
 fi

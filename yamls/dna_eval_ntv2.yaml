@@ -6,23 +6,23 @@ dataset_base_path: /data/lindseylm/PROPHAGE_IDENTIFICATION_LLM/MODELS/MODERNBERT
 # Which tasks to evaluate (comment out to run all)
 eval_tasks:
   - enhancers  # Start with enhancers task (200bp, fits in 512 limit)
-  # - H2AFZ
-  # - H3K27me3
-  # - H3K36me3
-  # - H3K4me1
-  # - H3K4me2
-  # - H3K4me3
-  # - H3K9ac
-  # - H3K9me3
-  # - H4K20me1
-  # - enhancers
-  # - enhancers_types
-  # - promoter_all
-  # - promoter_no_tata
-  # - promoter_tata
-  # - splice_sites_acceptors
-  # - splice_sites_all
-  # - splice_sites_donors
+  - H2AFZ
+  - H3K27me3
+  - H3K36me3
+  - H3K4me1
+  - H3K4me2
+  - H3K4me3
+  - H3K9ac
+  - H3K9me3
+  - H4K20me1
+  - enhancers
+  - enhancers_types
+  - promoter_all
+  - promoter_no_tata
+  - promoter_tata
+  - splice_sites_acceptors
+  - splice_sites_all
+  - splice_sites_donors
 
 # Model configuration (will be overridden by command line)
 model:
